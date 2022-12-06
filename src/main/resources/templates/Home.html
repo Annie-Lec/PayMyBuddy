@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="Template">
+
+
+<head>
+<meta charset="UTF-8">
+<title>home</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
+
+
+</head>
+
+<body>
+	<div layout:fragment="content1">
+
+		<div class="container-fluid bg-light  p-3  ">
+			<div class="text-muted bg-light ">
+				<h1 class="fs-5 fw-light ">Home</h1>
+			</div>
+			<div>
+				<!--  <span sec:authentication="name"></span> -->
+			</div>
+		</div>
+
+		<div>
+			<h2 class="text-danger">Bienvenue chez Pay My Buddy !</h2>
+			<p class="text-light" >Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+				Mollitia nobis nihil beatae et labore voluptate impedit aliquam,
+				dicta consequatur quia fugit quo est aliquid aspernatur ratione ut
+				nam sed eum</p>
+		</div>
+
+	</div>
+
+</body>
+
+</html>
