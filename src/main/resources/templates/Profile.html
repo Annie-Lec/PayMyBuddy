@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="Template1">
+
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>home</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
+<script type="text/javascript"
+	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+
+<body>
+	<div layout:fragment="content1">
+
+		<div class="container-fluid bg-light text-muted  p-3  ">
+			<div>
+				<h1 class="fs-5 fw-light ">Profile</h1>
+			</div>
+			<div>
+				<span sec:authentication="name"></span>
+			</div>
+
+		</div>
+
+		<div>
+			<h2 class="text-danger">Manage your profile</h2>
+			<p class="text-dark">Lorem ipsum dolor sit amet, consectetur
+				adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+				dolore magna aliqua.</p>
+		</div>
+
+
+		<div class="container mt-5">
+
+			<div class="card-header">Pay my Buddy</div>
+			<div class="card-body">
+
+
+				<form method="post" th:action="@{/savemyprofile}">
+					<div>
+						<label>ID </label> <input class="form-control"
+							type="text" readonly="readonly" name="id"
+							th:value="${buddyUser.id}" />
+					</div>
+					<div>
+						<label>Choose your pseudo </label> <input class="form-control" type="text"
+							name="name" th:value="${buddyUser.pseudo}" /> <span
+							class="text-danger" th:errors="${buddyUser.pseudo}"></span>
+					</div>
+
+					<div>
+						<label>Last Name </label> <input class="form-control" type="text"
+							name="name" th:value="${buddyUser.lastName}" /> <span
+							class="text-danger" th:errors="${buddyUser.lastName}"></span>
+					</div>
+					<div>
+						<label>First Name </label> <input class="form-control" type="text"
+							name="firstName" th:value="${buddyUser.firstName}" /> <span
+							class="text-danger" th:errors="${buddyUser.firstName}"></span>
+					</div>
+					<div>
+						<label>Date Of Birth</label> <input class="form-control"
+							type="date" name="ddn" th:value="${buddyUser.dateDenaissance}" /> <span
+							class="text-danger" th:errors="${buddyUser.dateDenaissance}"></span>
+					</div>
+
+					<button type="submit" class="btn btn-primary">Save</button>
+
+
+
+
+				</form>
+
+
+
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+
+</body>
+
+</html>

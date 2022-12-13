@@ -8,12 +8,11 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
+
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Past;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +31,7 @@ public class Transaction {
 	@ManyToOne
 	private BuddyUser transmitter;
 	@ManyToOne
-	private Contact beneficiary;
+	private BuddyUser beneficiary;
 	private String description;
 	//@Past
 	private Date date;

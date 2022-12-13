@@ -56,6 +56,13 @@ public class SecurityServiceImpl implements SecurityService {
 		AppUser appUser = appUserRepository.findUserByUsername(username);
 		return appUser;
 	}
+	
+
+	@Override
+	public Long getId(String username) {
+		AppUser appUser = appUserRepository.findUserByUsername(username);
+		return appUser.getId();
+	}
 
 	@Override
 	public List<AppUser> listUsers() {
@@ -75,20 +82,41 @@ public class SecurityServiceImpl implements SecurityService {
 		appUser.setBuddyUser(buddyUser);
 		appUserRepository.save(appUser);
 	}
+	@Override
+	public void AddBuddyUserToUser(String username) {
+		AppUser appUser = appUserRepository.findUserByUsername(username);
+		BuddyUser buddyUser = new BuddyUser();
+		
+		buddyUserRepository.save(buddyUser);
+				buddyUser = buddyUserRepository.findBuddyUserById(appUser.getId());
+		buddyUser.setPseudo("pseudo"+buddyUser.getId());
+		buddyUserRepository.save(buddyUser);		
+		
+		appUser.setBuddyUser(buddyUser);
+		addRoleToUser(username, "USER");
+		appUserRepository.save(appUser);
+	}
+
 
 	@Override
 	public AppUser saveNewUser(String username, String password, String verifyPwd) {
 		if (!password.equals(verifyPwd))
 			throw new RuntimeException("Bad credentials");
+		System.out.println("1");
 		String hachedPwd = passwordEncoder.encode(password);
+		System.out.println("2");
 		AppUser appUser = new AppUser();
+		System.out.println("3");
 		appUser.setUsername(username);
 		appUser.setPassword(hachedPwd);
 		appUser.setActive(true);
-		
+		System.out.println("4");
 		AppUser saveAppUser = appUserRepository.save(appUser);
-
+		System.out.println("5");
 		return saveAppUser;
 	}
+
+	
+
 
 }

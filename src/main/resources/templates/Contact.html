@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="Template1">
+
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>home</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
+<script type="text/javascript"
+	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+
+<body>
+	<div layout:fragment="content1">
+
+		<div class="container-fluid bg-light text-muted  p-3  ">
+			<div>
+				<h1 class="fs-5 fw-light ">Contact</h1>
+			</div>
+			<div>
+				<span sec:authentication="name"></span>
+			</div>
+
+		</div>
+
+		<div>
+			<h2 class="text-danger">Manage your contacts !</h2>
+			<p class="text-dark">Lorem ipsum dolor sit amet, consectetur
+				adipisicing elit. Mollitia nobis nihil beatae et labore voluptate
+				impedit aliquam, dicta consequatur quia fugit quo est aliquid
+				aspernatur ratione ut nam sed eum</p>
+		</div>
+
+
+		<div class="container mt-5">
+
+			<div class="card-header">My contacts</div>
+			<div class="card-body">
+
+				<form method="get" th:action="@{/contacts}">
+					<!--  	<input type="text" name="pseudo" th:value="${pseudo}" />
+	 			<input type="text" name="id" th:value="${id}" /> -->
+
+					<label>Contact : </label> <input type="text" name="keyword"
+						th:value="${searchedKeyword}">
+					<button class="btn btn-info" type="submit">Search</button>
+
+				</form>
+
+				<table class="table">
+
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Pseudo</th>
+							<th>Date of birth</th>
+							<th>First name</th>
+							<th>Last name</th>
+						</tr>
+
+					</thead>
+					<tbody>
+						<tr th:each=" p : ${listContacts}">
+							<td th:text="${p.id}"></td>
+							<td th:text="${p.pseudo}"></td>
+							<td th:text="${p.dateDenaissance}"></td>
+							<td th:text="${p.firstName}"></td>
+							<td th:text="${p.lastName}"></td>
+							<td sec:authorize="hasAuthority('USER')"><a
+								onclick="return confirm('Etes-vous sûr de vouloir supprimer votre contact ?')"
+								class="btn btn-danger"
+								th:href="@{delete(id=${p.id}, keyword=${searchedKeyword}, page=${currentPage})}">
+									Delete </a></td>
+
+						</tr>
+
+					</tbody>
+
+				</table>
+				<ul class="nav nav-pills">
+					<li th:each="page,status : ${pages}"><a
+						th:class="${status.index==currentPage?'btn btn-info m-lg-1':'btn btn-outline-info m-lg-1'}"
+						th:text="${status.index}"
+						th:href="@{/contacts(page=${status.index}, keyword=${searchedKeyword})}">
+					</a></li>
+
+				</ul>
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+
+</body>
+
+</html>

@@ -31,16 +31,15 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
-//		http.authorizeHttpRequests()
-//		.antMatchers("/transfer/**","/myprofile/**", "/contact/**", "/logoff").hasAuthority("USER");
-		http.formLogin();
+	//	http.authorizeRequests().antMatchers("/transfer/**","/updatemyprofile/**", "/contacts/**").hasAuthority("ROLE_USER");
+		http.authorizeRequests().and().formLogin().loginPage("/login").permitAll();
 		//page Home accessible à tous même sans connexion
-		http.authorizeHttpRequests().antMatchers("/", "/login/**").permitAll();
+		http.authorizeRequests().antMatchers("/", "/home/**", "/register/**", "/login/**").permitAll();
 		// attention aux accès aux répertoires static qui contiennent les css!! Si on
 		// donne l accès au menu home à tt le monde par ex...
-		http.authorizeHttpRequests().antMatchers("/webjars/**","/media/**" ).permitAll();
+		http.authorizeRequests().antMatchers("/webjars/**","/media/**" ).permitAll();
 		
-		http.authorizeHttpRequests().anyRequest().authenticated();
+		http.authorizeRequests().anyRequest().authenticated();
 		
 		http.authenticationProvider(authenticationProvider());
 		return http.build();

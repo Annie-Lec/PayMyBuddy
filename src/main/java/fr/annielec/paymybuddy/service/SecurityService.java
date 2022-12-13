@@ -16,8 +16,9 @@ public interface SecurityService {
 	//pour des futurs admin
 	List<AppUser> listUsers();
 	void removeUser(AppUser appUser);
-	
+	public Long getId(String username);
 	//pour lier au groupe buddy
 		void AddBuddyUserToUser(String username, String pseudo);
+		public void AddBuddyUserToUser(String username);
 
 }
