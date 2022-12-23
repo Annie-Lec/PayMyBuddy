@@ -47,6 +47,9 @@
 
 	<section layout:fragment="content1"></section>
 
-	
+	<a th:fragment="paging(pageNum, label, tooltip)" class="page-link"
+		th:href="@{'/contacts?' + 'page=' + ${pageNum-1} }"
+		th:title="${tooltip}" rel="tooltip"> [[${label}]] </a>
+		
 </body>
 </html>

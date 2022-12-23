@@ -19,6 +19,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,6 +41,7 @@ public class BuddyUser {
 	private String firstName;
 	
 	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date dateDenaissance;
 	
 	@OneToOne(mappedBy = "buddyUser")
@@ -57,7 +60,7 @@ public class BuddyUser {
 //    	joinColumns = @JoinColumn( name = "idBuddyUser" ),
 //    	inverseJoinColumns = @JoinColumn( name = "idContact" ) )
 	@OneToMany(fetch = FetchType.LAZY)
-	private List<Contact> Contacts = new ArrayList<>();
+	private List<Contact> contacts = new ArrayList<>();
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	private Collection<Transaction> transactions;

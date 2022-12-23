@@ -46,19 +46,18 @@
 
 				<form method="post" th:action="@{/savemyprofile}">
 					<div>
-						<label>ID </label> <input class="form-control"
-							type="text" readonly="readonly" name="id"
-							th:value="${buddyUser.id}" />
+						<label>ID </label> <input class="form-control" type="text"
+							readonly="readonly" name="id" th:value="${buddyUser.id}" />
 					</div>
 					<div>
-						<label>Choose your pseudo </label> <input class="form-control" type="text"
-							name="name" th:value="${buddyUser.pseudo}" /> <span
+						<label>Choose your pseudo </label> <input class="form-control"
+							type="text" name="pseudo" th:value="${buddyUser.pseudo}" /> <span
 							class="text-danger" th:errors="${buddyUser.pseudo}"></span>
 					</div>
 
 					<div>
 						<label>Last Name </label> <input class="form-control" type="text"
-							name="name" th:value="${buddyUser.lastName}" /> <span
+							name="lastName" th:value="${buddyUser.lastName}" /> <span
 							class="text-danger" th:errors="${buddyUser.lastName}"></span>
 					</div>
 					<div>
@@ -68,7 +67,8 @@
 					</div>
 					<div>
 						<label>Date Of Birth</label> <input class="form-control"
-							type="date" name="ddn" th:value="${buddyUser.dateDenaissance}" /> <span
+							type="date" name="dateDenaissance"
+							th:value="${buddyUser.dateDenaissance}" /> <span
 							class="text-danger" th:errors="${buddyUser.dateDenaissance}"></span>
 					</div>
 
@@ -76,8 +76,15 @@
 
 
 
-
 				</form>
+				<div class="container mt-5">
+
+
+					<a class="btn btn-primary" th:href="@{/watchmybudyAccount}">Manage
+						your BuddyAccount</a>
+
+				</div>
+
 
 
 

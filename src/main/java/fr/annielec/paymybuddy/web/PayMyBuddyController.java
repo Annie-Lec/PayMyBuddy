@@ -1,5 +1,7 @@
 package fr.annielec.paymybuddy.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -16,8 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 import fr.annielec.paymybuddy.entities.AppUser;
+import fr.annielec.paymybuddy.entities.BuddyAccount;
 import fr.annielec.paymybuddy.entities.BuddyUser;
 import fr.annielec.paymybuddy.service.PayMyBuddyService;
 import fr.annielec.paymybuddy.service.SecurityService;
@@ -38,122 +40,174 @@ public class PayMyBuddyController {
 
 	// affiche liste des contacts avec pagination
 	@GetMapping("/contacts")
-	public String listeContactsU(Model model, 
-			@RequestParam(name = "page", defaultValue = "0") int page,
-			@RequestParam(name = "size", defaultValue = "3") int size,
-			@RequestParam(name = "keyword", defaultValue = "") String keyword) {
+	public String listeContactsU(Model model, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "3") int size) {
 		// on recupere le username courant
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentUserName = authentication.getName();
 		Long IdUser = securityService.getId(currentUserName);
 		String pseudo = buddyService.retrievePseudoWithIdUser(IdUser);
-		
-		Page<BuddyUser> pageBUC = buddyService.findBuddyUserContactByPseudoContains(pseudo, keyword, PageRequest.of(page, size));
+
+		List<BuddyUser> listBUC = buddyService.findBuddyUserContactForAPseudo(pseudo);
+		Page<BuddyUser> pageBUC = buddyService.findBuddyUserContactForAPseudo(pseudo, PageRequest.of(page, size));
 		model.addAttribute("listContacts", pageBUC.getContent());
-		// stocker le nb de page
-		model.addAttribute("pages", new int[pageBUC.getTotalPages()]);
-		// stocke la page courante : pour la mise en forme du cout on selectionne en
-		// cours
-		model.addAttribute("currentPage", page);
-		model.addAttribute("pseudo", pseudo);
+		model.addAttribute("currentPage", pageBUC.getNumber() + 1);
+		model.addAttribute("totalItems", listBUC.size());
+		model.addAttribute("totalPages", Math.round(listBUC.size() / size) + 1);
+		model.addAttribute("page", page);
+
+		model.addAttribute("pageSize", size);
+
 		return "Contact";
 	}
-	
-	
+
+//**************************************************************************************************/
 	@GetMapping("/register")
-	public String save(Model model, 
-			@Valid AppUser appUser, 
-			BindingResult bindingResult,  
-			@RequestParam(defaultValue = "") String username, 
-			@RequestParam(defaultValue = "") String password,
+	public String save(Model model, @Valid AppUser appUser, BindingResult bindingResult,
+			@RequestParam(defaultValue = "") String username, @RequestParam(defaultValue = "") String password,
 			@RequestParam(defaultValue = "") String verifyPwd) {
-	
-	
+
 		if (bindingResult.hasErrors()) {
 			return "/register";
 		} else {
-			System.out.println("0");
-			 appUser= 	securityService.saveNewUser( username,  password,  verifyPwd);
-			 securityService.AddBuddyUserToUser(username);
-			 					
+			
+			appUser = securityService.saveNewUser(username, password, verifyPwd);
+			securityService.AddBuddyUserToUser(username);
+
 			return "redirect:/login";
 		}
 	}
-	
+
 	@GetMapping("/login")
-	public String connect(Model model, 
-			@Valid AppUser appUser, 
-			BindingResult bindingResult,  
-			@RequestParam(defaultValue = "")String username, 
-			@RequestParam(defaultValue = "") String password) {
-	
-	
+	public String connect(Model model, @Valid AppUser appUser, BindingResult bindingResult,
+			@RequestParam(defaultValue = "") String username, @RequestParam(defaultValue = "") String password) {
+
 		if (bindingResult.hasErrors()) {
 			return "/login";
 		} else {
-			 
 			return "redirect:/contacts";
 		}
 	}
-	
-	
-	@GetMapping(value="/logout")
-	public String logoutPage (HttpServletRequest request, HttpServletResponse response) {
-	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    if (auth != null){    
-	        new SecurityContextLogoutHandler().logout(request, response, auth);
-	    }
-	    return "redirect:/login?logout";
+
+	@GetMapping("/newContact")
+	public String newContact() {
+
+		return "newContact";
+
 	}
-	
+
+	// sauve mes info de profil
+	@PostMapping("/addnewContact")
+	public String addnewContact(Model model, @RequestParam(defaultValue = "") String pseudoContact) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUserName = authentication.getName();
+		Long IdUser = securityService.getId(currentUserName);
+		String pseudoBU = buddyService.retrievePseudoWithIdUser(IdUser);
+
+		model.addAttribute("pseudoContact", pseudoContact);
+
+		buddyService.addContactsToBuddyUser(pseudoBU, pseudoContact);
+
+		return "redirect:/contacts";
+
+	}
+
+	@GetMapping(value = "/logout")
+	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth != null) {
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
+		return "redirect:/login?logout";
+	}
+
 	// affiche mes info de profil
-	@GetMapping("/updatemyprofile")
+	@GetMapping("/watchmyprofile")
 	public String monProfil(Model model) {
 		// on recupere le username courant
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentUserName = authentication.getName();
 		Long IdUser = securityService.getId(currentUserName);
-		
-		
+
 		BuddyUser bu = buddyService.findBuddyUserById(IdUser);
 		model.addAttribute("buddyUser", bu);
 
-//		String pseudo = buddyService.retrievePseudoWithIdUser(IdUser);
-		
-		
-		//	buddyService.saveBuddyUser(bu);
-					
-			return "Profile";
-		
+		return "Profile";
+
 	}
-	
-	// affiche mes info de profil
-	@GetMapping("/savemyprofile")
+
+	// sauve mes info de profil
+	@PostMapping("/savemyprofile")
 	public String savemonProfil(Model model, @Valid BuddyUser buddyUser, BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			return "Profile";
+		} else {
+			buddyService.saveBuddyUser(buddyUser);
+
+			return "redirect:/contacts";
+		}
+
+	}
+
+	// affiche mes info de profil : buddy Account
+	@GetMapping("/watchmybudyAccount")
+	public String myBuddyAccount(Model model) {
+		// on recupere le username courant
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUserName = authentication.getName();
+		Long IdUser = securityService.getId(currentUserName);
+
+		String pseudo = buddyService.retrievePseudoWithIdUser(IdUser);
+
+		BuddyAccount ba = buddyService.findAccountByPseudo(pseudo);
+		model.addAttribute("buddyAccount", ba);
+
+		return "buddyAccount";
+
+	}
+
+	// sauve mes info de compte
+	@PostMapping("/savemybudyAccount")
+	public String savemyBuddyAccount(Model model, @Valid BuddyAccount buddyAccount, BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			return "buddyAccount";
+		} else {
+			buddyService.saveBuddyAccount(buddyAccount);
+
+			return "buddyAccount";
+		}
+
+	}
+
+	@GetMapping("/creditMyBuddyAccount")
+	public String creditMyAccount(Model model, @RequestParam(defaultValue = "14") String amountToCharge) {
 		// on recupere le username courant
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentUserName = authentication.getName();
 		Long IdUser = securityService.getId(currentUserName);
 		
-		
-		if (bindingResult.hasErrors()) {
-			return "Profile";
-		} else {
-			buddyService.saveBuddyUser(buddyUser);
-					
-			return "redirect:/contacts";
-		}
-		
-		
-			
-					
-			
-		
+		buddyService.creditBalance(IdUser, Double.parseDouble(amountToCharge));
+
+		return "redirect:/watchmybudyAccount";
+
 	}
-	
-	
-	
 
+	@GetMapping("/debitMyBuddyAccount")
+	public String debitMyAccount(Model model, @Valid BuddyAccount buddyAccount, BindingResult bindingResult,
+			@RequestParam(defaultValue = "0") Long amountToCharge) {
 
+		if (bindingResult.hasErrors()) {
+			return "buddyAccount";
+		} else {
+			double resultat = buddyAccount.getBalance() - amountToCharge;
+			buddyAccount.setBalance(resultat);
+			buddyService.saveBuddyAccount(buddyAccount);
+
+			return "buddyAccount";
+		}
+
+	}
 
 }
