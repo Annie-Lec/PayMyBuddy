@@ -51,14 +51,6 @@ public class BuddyUser {
 	@JoinColumn(name = "buddyAccount_id", referencedColumnName = "id")
 	private BuddyAccount buddyAccount;
 	
-//	@OneToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "myContactId", referencedColumnName = "id")
-//	private Contact monContact;
-	
-//	@ManyToMany //(mappedBy = "buddyUserContacts", fetch=FetchType.LAZY)
-//	@JoinTable( name = "T_BuddyUsers_Contacts_Associations",
-//    	joinColumns = @JoinColumn( name = "idBuddyUser" ),
-//    	inverseJoinColumns = @JoinColumn( name = "idContact" ) )
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<Contact> contacts = new ArrayList<>();
 	

@@ -30,5 +30,7 @@ public class BuddyAccount {
 	@OneToOne(mappedBy = "buddyAccount")
 	private BuddyUser buddyUser;
 	
+	private double amountToCharge;
+	
 
 }

@@ -30,7 +30,7 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		
+	//	http.csrf().disable();
 	//	http.authorizeRequests().antMatchers("/transfer/**","/updatemyprofile/**", "/contacts/**").hasAuthority("ROLE_USER");
 		http.authorizeRequests().and().formLogin().loginPage("/login").permitAll();
 		//page Home accessible à tous même sans connexion

@@ -70,7 +70,7 @@ public class PayMyBuddyController {
 		if (bindingResult.hasErrors()) {
 			return "/register";
 		} else {
-			
+
 			appUser = securityService.saveNewUser(username, password, verifyPwd);
 			securityService.AddBuddyUserToUser(username);
 
@@ -162,10 +162,44 @@ public class PayMyBuddyController {
 
 		BuddyAccount ba = buddyService.findAccountByPseudo(pseudo);
 		model.addAttribute("buddyAccount", ba);
-
 		return "buddyAccount";
 
+
 	}
+	
+	@GetMapping("/chargebuddyAccount")
+	public String chargemyBuddyAccount(Model model) {
+		// on recupere le username courant
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUserName = authentication.getName();
+		Long IdUser = securityService.getId(currentUserName);
+
+		String pseudo = buddyService.retrievePseudoWithIdUser(IdUser);
+
+		BuddyAccount ba = buddyService.findAccountByPseudo(pseudo);
+		model.addAttribute("buddyAccount", ba);
+		return "chargebuddyAccount";
+
+
+	}
+	
+	@GetMapping("/chargebankAccount")
+	public String chargemyBankAccount(Model model) {
+		// on recupere le username courant
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUserName = authentication.getName();
+		Long IdUser = securityService.getId(currentUserName);
+
+		String pseudo = buddyService.retrievePseudoWithIdUser(IdUser);
+
+		BuddyAccount ba = buddyService.findAccountByPseudo(pseudo);
+		model.addAttribute("buddyAccount", ba);
+		return "chargebankAccount";
+
+
+	}
+
+
 
 	// sauve mes info de compte
 	@PostMapping("/savemybudyAccount")
@@ -175,37 +209,39 @@ public class PayMyBuddyController {
 			return "buddyAccount";
 		} else {
 			buddyService.saveBuddyAccount(buddyAccount);
+			return "redirect:/watchmybudyAccount";
+		}
+	}
 
-			return "buddyAccount";
+	@PostMapping("/creditMyBuddyAccount")
+	public String creditMyAccount(Model model, @Valid BuddyAccount buddyAccount, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "chargebuddyAccount";
+		} else {
+			double resultat = buddyAccount.getBalance() + buddyAccount.getAmountToCharge();
+			buddyAccount.setBalance(resultat);
+			buddyAccount.setAmountToCharge(0);
+			buddyService.saveBuddyAccount(buddyAccount);
+
+		//	return "buddyAccount";
+			return "redirect:/watchmybudyAccount";
 		}
 
 	}
 
-	@GetMapping("/creditMyBuddyAccount")
-	public String creditMyAccount(Model model, @RequestParam(defaultValue = "14") String amountToCharge) {
-		// on recupere le username courant
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentUserName = authentication.getName();
-		Long IdUser = securityService.getId(currentUserName);
-		
-		buddyService.creditBalance(IdUser, Double.parseDouble(amountToCharge));
-
-		return "redirect:/watchmybudyAccount";
-
-	}
-
-	@GetMapping("/debitMyBuddyAccount")
-	public String debitMyAccount(Model model, @Valid BuddyAccount buddyAccount, BindingResult bindingResult,
-			@RequestParam(defaultValue = "0") Long amountToCharge) {
+	@PostMapping("/debitMyBuddyAccount")
+	public String debitMyAccount(Model model, @Valid BuddyAccount buddyAccount, BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
-			return "buddyAccount";
+			return "chargebankAccount";
 		} else {
-			double resultat = buddyAccount.getBalance() - amountToCharge;
+			double resultat = buddyAccount.getBalance() - buddyAccount.getAmountToCharge();
 			buddyAccount.setBalance(resultat);
+			buddyAccount.setAmountToCharge(0);
 			buddyService.saveBuddyAccount(buddyAccount);
 
-			return "buddyAccount";
+		//	return "buddyAccount";
+			return "redirect:/watchmybudyAccount";
 		}
 
 	}

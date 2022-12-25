@@ -26,25 +26,26 @@
 <body>
 	<div layout:fragment="content1">
 
-		<div class="container-fluid bg-light text-muted  p-3  ">
-			<div>
-				<h1 class="fs-5 fw-light ">Contact</h1>
+		<div
+			class="container-fluid bg-light text-muted  p-3 row justify-content-between">
+			<div class="col-4">
+				<h1 class="fs-5 fw-light ">Transactions with your buddies</h1>
 			</div>
-			<div>
-				<span sec:authentication="name"></span>
+			<div class="col-4">
+				<span sec:authentication="name"> </span>
 			</div>
 
 		</div>
 
 		<div>
-			<h2 class="text-danger">Manage your contacts !</h2>
+			<h2 class="text-danger">Manage your transaction !</h2>
 			<p class="text-dark">Lorem ipsum dolor sit amet, consectetur
 				adipisicing elit. Mollitia nobis nihil beatae et labore voluptate
 				impedit aliquam, dicta consequatur quia fugit quo est aliquid
 				aspernatur ratione ut nam sed eum</p>
 		</div>
 		<div class="container mt-5">
-			<div class="card-header">Add a new contact</div>
+			<div class="card-header">Add a new transaction</div>
 			<a class="btn btn-primary" th:href="@{/newContact}">Add a contact</a>  
 			<!-- <button type="submit" class="btn btn-primary" th:href="@{/newContact}">Add a contact</button> -->
 		
@@ -77,11 +78,7 @@
 								<td>[[${p.dateDenaissance}]]</td>
 								<td>[[${p.firstName}]]</td>
 								<td>[[${p.lastName}]]</td>
-								<td sec:authorize="hasAuthority('USER')"><a
-									onclick="return confirm('Etes-vous sûr de vouloir supprimer votre contact ?')"
-									class="btn btn-danger"
-									th:href="@{/delete(id=${p.id}, page=${currentPage})}">
-										Delete </a></td>
+							
 
 							</tr>
 

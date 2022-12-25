@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="Template1">
+
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>home</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
+<script type="text/javascript"
+	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+
+<body>
+	<div layout:fragment="content1">
+
+		<div
+			class="container-fluid bg-light text-muted  p-3 row justify-content-between">
+			<div class="col-4">
+				<h1 class="fs-5 fw-light ">Profile / Charge your Buddy Account</h1>
+			</div>
+			<div class="col-4">
+				<span sec:authentication="name"> </span>
+			</div>
+
+		</div>
+
+		<div>
+			<h2 class="text-danger">Charge your buddy Account</h2>
+		</div>
+
+
+		<div class="container mt-4">
+
+			<div class="card-header">Profile / Make a transfer to your
+				Buddy Account</div>
+			<div class="card-body">
+
+
+				
+			  	<form method="post" th:action="@{/creditMyBuddyAccount}"> 
+					
+
+						<div>
+							<label>ID </label> <input class="form-control" type="text"
+								name="id" th:value="${buddyAccount.id}" />
+						</div>
+
+						<h3 class="p-2">Your bank details</h3>
+						<div>
+							<label>IBAN </label> <input class="form-control" type="text"
+								readonly="readonly" name="iban" th:value="${buddyAccount.iban}" />
+						</div>
+						<div>
+							<label>Bank Name </label> <input class="form-control" type="text"
+								readonly="readonly" name="bankName"
+								th:value="${buddyAccount.bankName}" />
+						</div>
+
+						<div class="container mt-2">
+							<label>Balance </label> <input class="form-control" type="text"
+								readonly="readonly" name="balance"
+								th:value="${buddyAccount.balance}" /> <br>
+						</div>
+
+
+						<div>
+							<h3 class=" p-2 fw-bolder font-monospace">Indicate the
+								amount to add to your buddy account :</h3>
+						</div>
+
+						<div>
+							<label>transfer amount :</label> <input type="text"
+								name="amountToCharge" th:value="${buddyAccount.amountToCharge}" />
+						</div>
+
+
+						<button type="submit" class="btn btn-primary">Charge</button>
+
+					</form>
+			</div>
+
+
+		</div>
+	</div>
+
+
+</body>
+
+</html>
