@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	layout:decorate="Template1">
+
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>home</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
+<script type="text/javascript"
+	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+
+<body>
+	<div layout:fragment="content1">
+
+		<div class="container-fluid bg-light text-muted  p-3  ">
+			<div>
+				<h1 class="fs-5 fw-light ">Contact</h1>
+			</div>
+			<div>
+				<span sec:authentication="name"></span>
+			</div>
+
+		</div>
+
+		<div>
+			<h2 class="text-danger">Transfer money to your buddies !</h2>
+			<p class="text-dark">Select one of your contact, write the amount
+				you want to transfer and a little description to define the transfer
+				and then click on the button "Transfer"</p>
+		</div>
+
+
+		<div class="container mt-5">
+
+			<div class="card-header">Pay my Buddy</div>
+			<div class="card-body">
+
+
+				<form method="post" th:action="@{/addnewTransfer}">
+
+					<!-- 				<div>
+						<label>Choose you buddy beneficiary : </label> <input class="form-control" type="text"
+							name="pseudoContact" th:value="${pseudoContact}" />
+					</div>
+	 -->
+
+
+					<div>
+						<label>Choose you buddy beneficiary : </label> 
+						<select class="form-control" name="pseudoContact" >
+							<option value="0">select beneficiary</option>
+							<option th:each="i : ${listContacts}"
+								th:value="${i}" th:text="${i}"></option>
+						</select>
+					</div>
+
+					<div>
+						<label>Tape the amount you want to transfer to your buddy
+						</label> <input class="form-control" type="text" name="amount"
+							th:value="${amount}" />
+					</div>
+
+					<div>
+						<label>Write a little description to explain your transfer
+						</label> <input class="form-control" type="text" name="description"
+							th:value="${description}" />
+					</div>
+
+					<!-- 		<br> <span th:if="${exists}">You have already added
+						this contact in your buddies !</span> <br> <span>Test du msg
+						: You have already added this contact in your buddies or this
+						buddies does not exist in the App !</span> <br>
+ -->
+
+					<button type="submit" class="btn btn-primary">Transfer</button>
+
+
+
+
+				</form>
+
+
+
+			</div>
+		</div>
+
+
+
+	</div>
+
+
+
+
+</body>
+
+</html>

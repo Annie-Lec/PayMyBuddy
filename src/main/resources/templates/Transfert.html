@@ -46,49 +46,52 @@
 		</div>
 		<div class="container mt-5">
 			<div class="card-header">Add a new transaction</div>
-			<a class="btn btn-primary" th:href="@{/newContact}">Add a contact</a>  
-			<!-- <button type="submit" class="btn btn-primary" th:href="@{/newContact}">Add a contact</button> -->
-		
+			<a class="btn btn-primary" th:href="@{/newTransfer}">Add a
+				connection / transaction</a>
+
 		</div>
 
 		<div class="container mt-5">
 
-			<div class="card-header">My contacts</div>
+			<div class="card-header">My transactions</div>
 			<div class="card-body">
 
-				<form method="get" th:action="@{/contacts}"></form>
-				<div th:if="${listContacts.size() > 0}">
+				<form method="get" th:action="@{/transfers}"></form>
+				<div th:if="${listTransactions.size() > 0}">
 					<table class="table">
 
 						<thead>
 							<tr>
 								<th scope="col">ID</th>
-								<th scope="col">Pseudo</th>
-								<th scope="col">Date of birth</th>
-								<th scope="col">First name</th>
-								<th scope="col">Last name</th>
+								<th scope="col">Transmitter</th>
+								<th scope="col">Beneficiary</th>
+								<th scope="col">Amount</th>
+								<th scope="col">Date of transaction</th>
+								<th scope="col">Fees</th>
+								<th scope="col">Type of transaction</th>
+								<th scope="col">Description</th>
 							</tr>
 
 						</thead>
 						<tbody>
-							<tr th:each=" p : ${listContacts}">
-								<th scope="row">[[${p.id}]]</th>
-
-								<td>[[${p.pseudo}]]</td>
-								<td>[[${p.dateDenaissance}]]</td>
-								<td>[[${p.firstName}]]</td>
-								<td>[[${p.lastName}]]</td>
-							
-
+							<tr th:each=" t : ${listTransactions}">
+								<th scope="row">[[${t.id}]]</th>
+								
+								<td>[[${t.transmitter.getPseudo()}]]</td>
+								<td>[[${t.beneficiary.getPseudo()}]]</td>
+								<td>[[${t.amount}]]</td>
+								<td>[[${t.date}]]</td>
+								<td>[[${t.fees}]]</td>
+								<td>[[${t.type}]]</td>
+								<td>[[${t.description}]]</td>
 							</tr>
-
 						</tbody>
-
 					</table>
+					
 				</div>
 
-				<div th:unless="${listContacts.size() > 0}">
-					<span>No contacts found!</span>
+				<div th:unless="${listTransactions.size() > 0}">
+					<span>No transactions found!</span>
 				</div>
 
 				<nav aria-label="Pagination" th:if="${totalPages > 0}">
@@ -97,13 +100,13 @@
 					<ul class="pagination justify-content-center">
 						<li class="page-item"
 							th:classappend="${currentPage == 1} ? 'disabled'"><a
-							th:replace="fragments/paging :: paging(1, '<<', 'First Page')"></a>
+							th:replace="fragments/pagingTransaction :: paging(1, '<<', 'First Page')"></a>
 						</li>
 
 
 						<li class="page-item font-weight-bold"
 							th:classappend="${currentPage == 1} ? 'disabled'"><a
-							th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
+							th:replace="fragments/pagingTransaction :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"></a>
 						</li>
 
 
@@ -115,7 +118,7 @@
 							th:classappend="${page == currentPage} ? 'active'"
 							th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
 							<a
-							th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
+							th:replace="fragments/pagingTransaction :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
 						</li>
 						<li class="page-item disabled"
 							th:if="${currentPage + 2 < totalPages}"><a class="page-link"
@@ -123,7 +126,7 @@
 						<li class="page-item font-weight-bold"
 							th:classappend="${currentPage == totalPages} ? 'disabled'">
 							<a
-							th:replace="fragments/paging :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
+							th:replace="fragments/pagingTransaction :: paging(${currentPage + 1},'Next', 'Next Page')"></a>
 						</li>
 
 
@@ -131,7 +134,7 @@
 						<li class="page-item"
 							th:classappend="${currentPage == totalPages} ? 'disabled'">
 							<a
-							th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"></a>
+							th:replace="fragments/pagingTransaction :: paging(${totalPages}, '>>', 'Last Page')"></a>
 						</li>
 					</ul>
 

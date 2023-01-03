@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import fr.annielec.paymybuddy.entities.AppRole;
 import fr.annielec.paymybuddy.entities.BuddyAccount;
 import fr.annielec.paymybuddy.entities.BuddyUser;
-
+//import fr.annielec.paymybuddy.entities.Transaction;
 import fr.annielec.paymybuddy.service.PayMyBuddyService;
 import fr.annielec.paymybuddy.service.SecurityService;
 
@@ -42,6 +42,8 @@ public class PaymybuddyApplication {
 			BuddyAccount buddyAccount4 =  new BuddyAccount();
 			BuddyAccount buddyAccount5 =  new BuddyAccount();
 			BuddyAccount buddyAccount6 =  new BuddyAccount();
+			buddyAccount1.setBalance(120);
+			buddyAccount6.setBalance(250);
 			buddyService.saveBuddyAccount(buddyAccount1);
 			buddyService.saveBuddyAccount(buddyAccount2);
 			buddyService.saveBuddyAccount(buddyAccount3);
@@ -143,6 +145,23 @@ public class PaymybuddyApplication {
 			buddyService.addContactsToBuddyUser("Minie", "Mickey");
 			buddyService.addContactsToBuddyUser("Minie", "Bugs");
 			
+
+			buddyService.addTransfersToBuddyUser("Minie", "Dingo", 10, "Minnie vers Dingo");
+			buddyService.addTransfersToBuddyUser("Minie", "Mickey", 100, "Minnie vers Mickey");
+//			Transaction transaction1 = new Transaction();
+//			transaction1.setAmount(10);
+//			transaction1.setTransmitter(buddyUser6);
+//			transaction1.setDescription("bof bof");
+//			transaction1.setBeneficiary(buddyUser5);
+//			buddyService.saveTransaction(transaction1);
+//
+//			Transaction transaction2 = new Transaction();
+//			transaction2.setAmount(95);
+//			transaction2.setTransmitter(buddyUser6);
+//			transaction2.setDescription("bof bof2");
+//			transaction2.setBeneficiary(buddyUser4);
+//			buddyService.saveTransaction(transaction2);
+
 
 		};
 		

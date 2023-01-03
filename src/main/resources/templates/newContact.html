@@ -47,11 +47,14 @@
 				<form method="post" th:action="@{/addnewContact}">
 
 					<div>
-						<label>Tape the pseudo of your contact </label> 
-						<input 	class="form-control" type="text" name="pseudoContact" th:value="${pseudoContact}" /> 
-						
+						<label>Tape the pseudo of your new contact </label> <input
+							class="form-control" type="text" name="pseudoContact"
+							th:value="${pseudoContact}" />
 					</div>
-
+					<br> <span th:if="${exists}" >You have already added
+						this contact in your buddies !</span> <br> 
+						<span >Test du msg : You
+						have already added this contact in your buddies or this buddies does not exist in the App!</span> <br>
 
 
 					<button type="submit" class="btn btn-primary">Save</button>

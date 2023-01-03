@@ -28,18 +28,19 @@ public interface PayMyBuddyService {
 	public BuddyAccount findBuddyAccountById(Long id);
 	public void addBuddyAccountToBuddyUser(Long id);
 	
-//	Page<BuddyUser> findByPseudoContains(String pseudo, Pageable pageable, List<BuddyUser> buContacts);
-	
 	public Page<Contact> findContactByPseudo(String pseudo, Pageable pageable);
 	public Page<BuddyUser> findBuddyUserContactForAPseudo(String pseudo,  Pageable pageable);
 	
-	Page<BuddyUser> findContactsForAPseudo(Pageable pageable, List<BuddyUser> buContacts);
+	public boolean addContactsToBuddyUser(String pseudoBuddyUser, String pseudoContact);
 	
-	public void addContactsToBuddyUser(String pseudoBuddyUser, String pseudoContact);
-	
-	public void creditBalance(Long id, double amount);
+	public List<Transaction> findBuddyUserTransactionForAPseudo(String pseudo);
+	public Page<Transaction> findBuddyUserTransactionForAPseudoPage(String pseudo, Pageable pageable);
 
 	
-	//public List<Transaction> findTransactionByUserPseudo(String pseudo);
+	public void creditBalance(Long id, double amount);
+	public void debitBalance(Long id, double amount);
+	public boolean addTransfersToBuddyUser(String pseudoBuddyUser, String pseudoContact, double amount, String description);
+	public List<String> findPseudoBuddyUserContactForAPseudo(String pseudo);
+	
 
 }

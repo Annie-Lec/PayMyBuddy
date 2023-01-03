@@ -1,5 +1,6 @@
 package fr.annielec.paymybuddy.web;
 
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import fr.annielec.paymybuddy.entities.AppUser;
 import fr.annielec.paymybuddy.entities.BuddyAccount;
 import fr.annielec.paymybuddy.entities.BuddyUser;
+import fr.annielec.paymybuddy.entities.Transaction;
 import fr.annielec.paymybuddy.service.PayMyBuddyService;
 import fr.annielec.paymybuddy.service.SecurityService;
 import lombok.AllArgsConstructor;
@@ -103,12 +105,21 @@ public class PayMyBuddyController {
 		String currentUserName = authentication.getName();
 		Long IdUser = securityService.getId(currentUserName);
 		String pseudoBU = buddyService.retrievePseudoWithIdUser(IdUser);
-
+		boolean exists = true;
 		model.addAttribute("pseudoContact", pseudoContact);
+		model.addAttribute("exists", exists);
 
-		buddyService.addContactsToBuddyUser(pseudoBU, pseudoContact);
+		try {
 
-		return "redirect:/contacts";
+			exists = buddyService.addContactsToBuddyUser(pseudoBU, pseudoContact);
+			if (exists) {
+				return "newContact";
+			} else {
+				return "redirect:/contacts";
+			}
+		} catch (Exception e) {
+			return "newContact";
+		}
 
 	}
 
@@ -164,9 +175,8 @@ public class PayMyBuddyController {
 		model.addAttribute("buddyAccount", ba);
 		return "buddyAccount";
 
-
 	}
-	
+
 	@GetMapping("/chargebuddyAccount")
 	public String chargemyBuddyAccount(Model model) {
 		// on recupere le username courant
@@ -180,9 +190,8 @@ public class PayMyBuddyController {
 		model.addAttribute("buddyAccount", ba);
 		return "chargebuddyAccount";
 
-
 	}
-	
+
 	@GetMapping("/chargebankAccount")
 	public String chargemyBankAccount(Model model) {
 		// on recupere le username courant
@@ -196,10 +205,7 @@ public class PayMyBuddyController {
 		model.addAttribute("buddyAccount", ba);
 		return "chargebankAccount";
 
-
 	}
-
-
 
 	// sauve mes info de compte
 	@PostMapping("/savemybudyAccount")
@@ -223,7 +229,7 @@ public class PayMyBuddyController {
 			buddyAccount.setAmountToCharge(0);
 			buddyService.saveBuddyAccount(buddyAccount);
 
-		//	return "buddyAccount";
+			// return "buddyAccount";
 			return "redirect:/watchmybudyAccount";
 		}
 
@@ -240,8 +246,82 @@ public class PayMyBuddyController {
 			buddyAccount.setAmountToCharge(0);
 			buddyService.saveBuddyAccount(buddyAccount);
 
-		//	return "buddyAccount";
+			// return "buddyAccount";
 			return "redirect:/watchmybudyAccount";
+		}
+
+	}
+
+	// affiche liste des transactions avec pagination
+	@GetMapping("/transfers")
+	public String listeTransfertsU(Model model, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "3") int size) {
+		// on recupere le username courant
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUserName = authentication.getName();
+		Long IdUser = securityService.getId(currentUserName);
+		String pseudo = buddyService.retrievePseudoWithIdUser(IdUser);
+
+		List<Transaction> listBUT = buddyService.findBuddyUserTransactionForAPseudo(pseudo);
+		Page<Transaction> pageBUT = buddyService.findBuddyUserTransactionForAPseudoPage(pseudo, PageRequest.of(page, size));
+		model.addAttribute("listTransactions", pageBUT.getContent());
+		model.addAttribute("currentPage", pageBUT.getNumber() + 1);
+		model.addAttribute("totalItems", listBUT.size());
+		model.addAttribute("totalPages", Math.round(listBUT.size() / size) + 1);
+		model.addAttribute("page", page);
+
+		model.addAttribute("pageSize", size);
+
+		return "Transfert";
+	}
+
+	@GetMapping("/newTransfer")
+	public String newTransfert(Model model) {
+		
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUserName = authentication.getName();
+		Long IdUser = securityService.getId(currentUserName);
+		String pseudoBU = buddyService.retrievePseudoWithIdUser(IdUser);
+
+		
+		List<String> listPseudoContactBU = buddyService.findPseudoBuddyUserContactForAPseudo(pseudoBU);
+		model.addAttribute("listContacts", listPseudoContactBU);
+
+
+		return "newTransfert";
+
+	}
+
+	// sauve mes info de profil
+	@PostMapping("/addnewTransfer")
+	public String addnewTransfert(Model model, 
+			@RequestParam(defaultValue = "") String pseudoContact,
+			@RequestParam(defaultValue = "") String amount, 
+			@RequestParam(defaultValue = "") String description) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentUserName = authentication.getName();
+		Long IdUser = securityService.getId(currentUserName);
+		String pseudoBU = buddyService.retrievePseudoWithIdUser(IdUser);
+
+
+		boolean isBalanceSufficient = false;
+
+
+		model.addAttribute("pseudoContact", pseudoContact);
+		model.addAttribute("amount", amount);
+		model.addAttribute("description", description);
+
+		try {
+
+			isBalanceSufficient = buddyService.addTransfersToBuddyUser(pseudoBU, pseudoContact,
+					Double.parseDouble(amount), description);
+			if (!isBalanceSufficient) {
+				return "newTransfert";
+			} else {
+				return "redirect:/transfers";
+			}
+		} catch (Exception e) {
+			return "newTransfert";
 		}
 
 	}

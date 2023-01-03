@@ -71,8 +71,8 @@
 							readonly="readonly" name="balance"
 							th:value="${buddyAccount.balance}" /> <span class="text-danger"
 							th:errors="${buddyAccount.balance}"></span> <br>
-						<p class="text-dark">Be carreful, To transfer money to your
-							contact, you must have enough money in your buddy account</p>
+						<h3 class=" p-2 fw-bolder font-monospace">Be carreful, To transfer money to your
+							contact, you must have enough money in your buddy account</h3>
 
 					</div>
 
@@ -80,20 +80,20 @@
 				</form>
 
  				<div>
-					<h3 class=" p-2 fw-bolder font-monospace">Recharger votre
-						Buddy Account ou effectuez un virement sur votre compte bancaire</h3>
+					<p class="text-dark">Recharger votre
+						Buddy Account ou effectuez un virement sur votre compte bancaire</p>
 				</div>
 				<div class="row justify-content-center m-2">
 					<div sec:authorize="hasAuthority('USER') " class="col-4">
 						<a class="btn btn-danger"
-							onclick="return confirm('Are you sure you want to debit your bank account?')"
+							
 							th:href="@{/chargebuddyAccount}"> Recharge your Buddy account
 						</a>
 					</div>
 
 					<div  class="col-4">
 						<a class="btn btn-danger"
-							onclick="return confirm('Are you sure you want to debit your buddy account?')"
+							
 							th:href="@{/chargebankAccount}"> Make a transfer to your bank
 							account </a>
 					</div>

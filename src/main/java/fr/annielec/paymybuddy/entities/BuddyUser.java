@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -54,8 +54,8 @@ public class BuddyUser {
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<Contact> contacts = new ArrayList<>();
 	
-	@OneToMany(fetch = FetchType.LAZY)
-	private Collection<Transaction> transactions;
+	@ManyToMany(fetch = FetchType.LAZY)
+	private List<Transaction> transactions = new ArrayList<>();
 	
 	
 	
