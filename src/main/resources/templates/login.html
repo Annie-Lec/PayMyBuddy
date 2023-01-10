@@ -13,6 +13,8 @@
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
 <script type="text/javascript"
 	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/1e22565bce.js"
+	crossorigin="anonymous"></script>
 
 
 </head>
@@ -20,68 +22,73 @@
 <body>
 	<div layout:fragment="content1">
 
-		<div class="container-fluid bg-light text-muted  p-3  ">
-			<div>
+		<div
+			class="container-fluid bg-light text-muted  p-3 row justify-content-between ">
+			<div class="col-4">
 				<h1 class="fs-5 fw-light ">Login</h1>
 			</div>
-			<div>
-				<span sec:authentication="name"></span>
+			<div class="col-4">
+				<span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
 			</div>
 
 		</div>
 
 		<div>
 			<h2 class="text-danger">Log to your account</h2>
-			<p class="text-dark">Lorem ipsum dolor sit amet, consectetur
-				adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-				dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-				exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-				esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-				cupidatat non proident, sunt in culpa qui officia deserunt mollit
-				anim id est laborum</p>
+			<p class="text-dark">If you have already an account to 'Pay My
+				Buddy' please indicate your credentials to log in. OrElse, click on
+				the link 'Register here' to create a new account.</p>
 		</div>
 
 
-		<div class="container mt-5">
+		<div class="container mt-5" style=" border: 1px solid silver; background-color:white;">
 
-			<div class="card-header">Pay my Buddy</div>
+			<div class="card-header fw-bold">Already have a Buddy account?<br></div>
 			<div class="card-body">
 
 
 				<form method="post" th:action="@{/login}">
-				
-				<div th:if="${param.error}" class="alert alert-error">
-				Invalid username or password
-				</div>
 
-					<div>
-						<label>Email</label> <input class="form-control" type="text"
-							name="username" placeholder="Email"
-							th:value="${appUser.username}" /> <span class="text-danger"
-							th:errors="${appUser.username}"></span>
+					<div th:if="${param.error}" class="alert alert-error" style="color:red;">
+						Invalid username or password !</div>
+
+					<div class="m-2">
+						<label> </label>
+						<div class="container" style=" border: 1px solid silver; background-color:white;">
+							<div class="d-inline d-sm-inline-block">
+								<i class="fas fa-envelope"></i>
+							</div>
+							
+							<input class="d-inline col-10" style="border: 1px solid white;" type="text" name="username"
+									placeholder="Email" th:value="${appUser.username}" />
+							
+						</div>
+						
 					</div>
-					<div>
-						<label>Password</label> <input class="form-control"
-							type="password" name="password" placeholder="Password"
-							th:value="${appUser.password}" /> <span class="text-danger"
-							th:errors="${appUser.password}"></span>
+					<div div class="m-2">
+						<label> </label>
+						<div class="container"	style="border: 1px solid silver; background-color:white">
+							<div class="d-inline d-sm-inline-block text-dark"> 
+								<i class="fas fa-asterisk"></i>
+							</div>
+						
+							<input class="d-inline col-10" style="border: 1px solid white;" type="password" name="password"
+								placeholder="Password" th:value="${appUser.password}" />
+						</div>
 					</div>
-					<div>
+					<div class="fst-italic m-1">
 						<label for="checkbox">Remember me</label> <input type="checkbox"
-							id="checkbox" name="remember-me" />
+							id="checkbox" name="remember-me" /><br>
 					</div>
 
-
-					<button type="submit" class="btn btn-primary">Log in</button>
-
-
-
+					<div class="d-grid gap-2 col-4 mx-auto">
+						<button type="submit" class="btn btn-primary ml-5">Log in</button>
+					</div>
 
 				</form>
 
-				<div>
-					You are a new user ? <a th:href="@{/register}">Register here</a>
+				<div class=" fw-bold"><br>
+					Don't have a Buddy account yet? <a th:href="@{/register}">Register here</a>
 				</div>
 
 			</div>

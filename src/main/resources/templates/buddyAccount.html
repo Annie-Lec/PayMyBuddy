@@ -20,8 +20,7 @@
 <body>
 	<div layout:fragment="content1">
 
-		<div
-			class="container-fluid bg-light text-muted  p-3 row justify-content-between">
+		<div class="container-fluid bg-light text-muted  p-3 row justify-content-between">
 			<div class="col-4">
 				<h1 class="fs-5 fw-light ">Profile / Manage your Bank details</h1>
 			</div>
@@ -38,83 +37,70 @@
 
 		<div class="container mt-5">
 
-			<div class="card-header">Pay my Buddy</div>
+			<div class="card-header"></div>
 			<div class="card-body">
 
-
 				<form method="post" th:action="@{/savemybudyAccount}">
-
-
-					<div>
-						<label>ID </label> <input class="form-control" type="text"
+				
+					<div class="mb-2 bg-light">
+						<label>your ID : </label> <input class="border-0 bg-light" type="text"
 							readonly="readonly" name="id" th:value="${buddyAccount.id}" />
 					</div>
+				
+					<div class="border border-1 bg-light p-3">
+						<h3 class="p-2">Your bank details</h3>
+						<div th:if="${bankDetailResponse=='NoData'}" class="text-danger fw-bold">
+							Please enter your bank details</div>
+						<div>
+							<label>IBAN </label>
+							<input class="form-control" type="text" name="iban" th:value="${buddyAccount.iban}" /> 
+							<span class="text-danger" th:errors="${buddyAccount.iban}"></span>
+						</div>
+						<div>
+							<label>Bank Name </label> 
+							<input class="form-control" type="text" name="bankName" th:value="${buddyAccount.bankName}" /> 
+							<span class="text-danger" th:errors="${buddyAccount.bankName}"></span>
+						</div>
 
-					<h3 class="p-2">Your bank details</h3>
-					<div>
-						<label>IBAN </label> <input class="form-control" type="text"
-							name="iban" th:value="${buddyAccount.iban}" /> <span
-							class="text-danger" th:errors="${buddyAccount.iban}"></span>
-					</div>
-					<div>
-						<label>Bank Name </label> <input class="form-control" type="text"
-							name="bankName" th:value="${buddyAccount.bankName}" /> <span
-							class="text-danger" th:errors="${buddyAccount.bankName}"></span>
-					</div>
-
-					<button type="submit" class="btn btn-primary">Save your
-						bank details</button>
-
-
-					<div class="container mt-5">
-						<label>Balance </label> <input class="form-control" type="text"
-							readonly="readonly" name="balance"
-							th:value="${buddyAccount.balance}" /> <span class="text-danger"
-							th:errors="${buddyAccount.balance}"></span> <br>
-						<h3 class=" p-2 fw-bolder font-monospace">Be carreful, To transfer money to your
-							contact, you must have enough money in your buddy account</h3>
-
+						<button type="submit" class="btn btn-primary">Save your bank details</button>
 					</div>
 
-
+					<div class="border border-1 bg-light p-3 mt-2">
+						<label>Balance </label> 
+						<input class="form-control" type="text" readonly="readonly" name="balance" th:value="${buddyAccount.balance}" /> 
+						<span class="text-danger" th:errors="${buddyAccount.balance}"> </span> 
+						<br>
+						<p class="p-2 fw-bolder fst-italic font-monospace"> Be carreful, To transfer money to your contact, you must have enough money in your buddy account</p>
+					</div>
 				</form>
 
- 				<div>
-					<p class="text-dark">Recharger votre
-						Buddy Account ou effectuez un virement sur votre compte bancaire</p>
-				</div>
-				<div class="row justify-content-center m-2">
-					<div sec:authorize="hasAuthority('USER') " class="col-4">
-						<a class="btn btn-danger"
-							
-							th:href="@{/chargebuddyAccount}"> Recharge your Buddy account
-						</a>
+
+				<div class="border border-1 p-3 mt-2" style="background-color: rgb(180, 254, 239) ">
+					<h3 class="p-2 text-dark">
+						Recharge your buddy account or make a transfer to your bank account
+					</h3>
+
+					<div th:if="${bankDetailResponse=='NoData'}" class="text-danger fs-4 fw-bold">
+						Please enter and save your bank details before any operations
 					</div>
 
-					<div  class="col-4">
-						<a class="btn btn-danger"
-							
-							th:href="@{/chargebankAccount}"> Make a transfer to your bank
-							account </a>
+					<div class="row justify-content-center m-2">
+						<div sec:authorize="hasAuthority('USER') " class="col-4">
+							 <a class="btn btn-danger"
+								th:if="${bankDetailResponse=='Data'}"
+								th:href="@{/chargebuddyAccount}"> Recharge your Buddy account </a>
+						</div>
+
+						<div class="col-4">
+							 <a class="btn btn-danger"
+								th:if="${bankDetailResponse=='Data'}"
+								th:href="@{/chargebankAccount}"> Make a transfer to your bank account </a>
+						</div>
 					</div>
 				</div>
-
- 
-
-
 			</div>
-
-
 		</div>
 	</div>
-
-
-
-
-
-
-
-
 </body>
 
 </html>

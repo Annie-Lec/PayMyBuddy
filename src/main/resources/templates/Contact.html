@@ -39,10 +39,8 @@
 
 		<div>
 			<h2 class="text-danger">Manage your contacts !</h2>
-			<p class="text-dark">Lorem ipsum dolor sit amet, consectetur
-				adipisicing elit. Mollitia nobis nihil beatae et labore voluptate
-				impedit aliquam, dicta consequatur quia fugit quo est aliquid
-				aspernatur ratione ut nam sed eum</p>
+			<p class="text-dark">Here you are the list of the contacts you have already added : before transfer money to one buddy, be sure he's in the list.
+			<br>Or Else, click on 'Add a contact' button! </p>
 		</div>
 		<div class="container mt-5">
 			<div class="card-header">Add a new contact</div>
@@ -73,17 +71,11 @@
 						<tbody>
 							<tr th:each=" p : ${listContacts}">
 								<th scope="row">[[${p.id}]]</th>
-
+								
 								<td>[[${p.pseudo}]]</td>
 								<td>[[${p.dateDenaissance}]]</td>
 								<td>[[${p.firstName}]]</td>
 								<td>[[${p.lastName}]]</td>
-								<td sec:authorize="hasAuthority('USER')"><a
-									onclick="return confirm('Etes-vous sûr de vouloir supprimer votre contact ?')"
-									class="btn btn-danger"
-									th:href="@{/delete(id=${p.id}, page=${currentPage})}">
-										Delete </a></td>
-
 							</tr>
 
 						</tbody>

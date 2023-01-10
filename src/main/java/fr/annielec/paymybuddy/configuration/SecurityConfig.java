@@ -8,7 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -30,16 +30,35 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	//	http.csrf().disable();
+	
 	//	http.authorizeRequests().antMatchers("/transfer/**","/updatemyprofile/**", "/contacts/**").hasAuthority("ROLE_USER");
-		http.authorizeRequests().and().formLogin().loginPage("/login").permitAll();
+	//	http.authorizeRequests().and().formLogin().loginPage("/login.html").permitAll().and().rememberMe().key("uniqueAndSecret");
 		//page Home accessible à tous même sans connexion
 		http.authorizeRequests().antMatchers("/", "/home/**", "/register/**", "/login/**").permitAll();
 		// attention aux accès aux répertoires static qui contiennent les css!! Si on
 		// donne l accès au menu home à tt le monde par ex...
 		http.authorizeRequests().antMatchers("/webjars/**","/media/**" ).permitAll();
 		
-		http.authorizeRequests().anyRequest().authenticated();
+		//http.authorizeRequests().anyRequest().authenticated();
+		http.authorizeRequests()
+        .antMatchers("/anonymous*")
+        .anonymous()
+        .antMatchers("/login*")
+        .permitAll()
+        .anyRequest()
+        .authenticated()
+        .and()
+        .formLogin()
+        .loginPage("/login.html")
+        .loginProcessingUrl("/login")
+        .failureUrl("/login.html?error=true")
+        .and()
+        .logout()
+        .deleteCookies("JSESSIONID")
+        .and()
+        .rememberMe()
+        .key("uniqueAndSecret");
+		
 		
 		http.authenticationProvider(authenticationProvider());
 		return http.build();

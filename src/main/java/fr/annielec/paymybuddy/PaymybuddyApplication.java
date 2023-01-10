@@ -1,8 +1,6 @@
 package fr.annielec.paymybuddy;
 
-
 import java.util.Date;
-
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -24,24 +22,23 @@ public class PaymybuddyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PaymybuddyApplication.class, args);
 	}
-	
-	//BCrypt pour cryptage du mot de passe
+
+	// BCrypt pour cryptage du mot de passe
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	
 	@Bean
 	CommandLineRunner start(SecurityService securityService, PayMyBuddyService buddyService) {
-		return args-> {
-			
-			BuddyAccount buddyAccount1 =  new BuddyAccount();
-			BuddyAccount buddyAccount2 =  new BuddyAccount();
-			BuddyAccount buddyAccount3 =  new BuddyAccount();
-			BuddyAccount buddyAccount4 =  new BuddyAccount();
-			BuddyAccount buddyAccount5 =  new BuddyAccount();
-			BuddyAccount buddyAccount6 =  new BuddyAccount();
+		return args -> {
+
+			BuddyAccount buddyAccount1 = new BuddyAccount();
+			BuddyAccount buddyAccount2 = new BuddyAccount();
+			BuddyAccount buddyAccount3 = new BuddyAccount();
+			BuddyAccount buddyAccount4 = new BuddyAccount();
+			BuddyAccount buddyAccount5 = new BuddyAccount();
+			BuddyAccount buddyAccount6 = new BuddyAccount();
 			buddyAccount1.setBalance(120);
 			buddyAccount6.setBalance(250);
 			buddyService.saveBuddyAccount(buddyAccount1);
@@ -50,7 +47,7 @@ public class PaymybuddyApplication {
 			buddyService.saveBuddyAccount(buddyAccount4);
 			buddyService.saveBuddyAccount(buddyAccount5);
 			buddyService.saveBuddyAccount(buddyAccount6);
-							
+
 			BuddyUser buddyUser1 = new BuddyUser();
 			buddyUser1.setDateDenaissance(new Date());
 			buddyUser1.setPseudo("Roger");
@@ -58,7 +55,7 @@ public class PaymybuddyApplication {
 			buddyUser1.setLastName("Rabbit");
 			buddyUser1.setBuddyAccount(buddyAccount1);
 			buddyService.saveBuddyUser(buddyUser1);
-			
+
 			BuddyUser buddyUser2 = new BuddyUser();
 			buddyUser2.setDateDenaissance(new Date());
 			buddyUser2.setPseudo("Bugs");
@@ -67,7 +64,6 @@ public class PaymybuddyApplication {
 			buddyUser2.setBuddyAccount(buddyAccount2);
 			buddyService.saveBuddyUser(buddyUser2);
 
-			
 			BuddyUser buddyUser3 = new BuddyUser();
 			buddyUser3.setDateDenaissance(new Date());
 			buddyUser3.setPseudo("Mickey");
@@ -75,7 +71,7 @@ public class PaymybuddyApplication {
 			buddyUser3.setLastName("Mouse");
 			buddyUser3.setBuddyAccount(buddyAccount3);
 			buddyService.saveBuddyUser(buddyUser3);
-			
+
 			BuddyUser buddyUser4 = new BuddyUser();
 			buddyUser4.setDateDenaissance(new Date());
 			buddyUser4.setPseudo("Donald");
@@ -83,7 +79,7 @@ public class PaymybuddyApplication {
 			buddyUser4.setLastName("Duck");
 			buddyUser4.setBuddyAccount(buddyAccount4);
 			buddyService.saveBuddyUser(buddyUser4);
-			
+
 			BuddyUser buddyUser5 = new BuddyUser();
 			buddyUser5.setDateDenaissance(new Date());
 			buddyUser5.setPseudo("Dingo");
@@ -92,7 +88,6 @@ public class PaymybuddyApplication {
 			buddyUser5.setBuddyAccount(buddyAccount5);
 			buddyService.saveBuddyUser(buddyUser5);
 
-			
 			BuddyUser buddyUser6 = new BuddyUser();
 			buddyUser6.setDateDenaissance(new Date());
 			buddyUser6.setPseudo("Minie");
@@ -101,36 +96,34 @@ public class PaymybuddyApplication {
 			buddyUser6.setBuddyAccount(buddyAccount6);
 			buddyService.saveBuddyUser(buddyUser6);
 
-					
-			securityService.addNewRole(new AppRole(1L,"USER"));
+			securityService.addNewRole(new AppRole(1L, "USER"));
 			securityService.saveNewUser("roger@gmail.com", "1234", "1234");
 			securityService.saveNewUser("buddy2@email.fr", "1234", "1234");
 			securityService.saveNewUser("mickey@yahoo.fr", "1234", "1234");
 			securityService.saveNewUser("dodo@gmail.com", "1234", "1234");
 			securityService.saveNewUser("dingue@email.fr", "1234", "1234");
 			securityService.saveNewUser("minie@yahoo.fr", "1234", "1234");
-			
+
 			securityService.addRoleToUser("roger@gmail.com", "USER");
 			securityService.addRoleToUser("buddy2@email.fr", "USER");
 			securityService.addRoleToUser("mickey@yahoo.fr", "USER");
 			securityService.addRoleToUser("dodo@gmail.com", "USER");
 			securityService.addRoleToUser("dingue@email.fr", "USER");
 			securityService.addRoleToUser("minie@yahoo.fr", "USER");
-			
+
 			securityService.AddBuddyUserToUser("roger@gmail.com", "Roger");
 			securityService.AddBuddyUserToUser("buddy2@email.fr", "Bugs");
 			securityService.AddBuddyUserToUser("mickey@yahoo.fr", "Mickey");
 			securityService.AddBuddyUserToUser("dodo@gmail.com", "Donald");
 			securityService.AddBuddyUserToUser("dingue@email.fr", "Dingo");
 			securityService.AddBuddyUserToUser("minie@yahoo.fr", "Minie");
-			
+
 			buddyService.addBuddyAccountToBuddyUser(1L);
 			buddyService.addBuddyAccountToBuddyUser(2L);
 			buddyService.addBuddyAccountToBuddyUser(3L);
 			buddyService.addBuddyAccountToBuddyUser(4L);
 			buddyService.addBuddyAccountToBuddyUser(5L);
 			buddyService.addBuddyAccountToBuddyUser(6L);
-			
 
 			buddyService.addContactsToBuddyUser("Roger", "Roger");
 			buddyService.addContactsToBuddyUser("Roger", "Bugs");
@@ -142,9 +135,16 @@ public class PaymybuddyApplication {
 			buddyService.addContactsToBuddyUser("Minie", "Minie");
 			buddyService.addContactsToBuddyUser("Minie", "Donald");
 			buddyService.addContactsToBuddyUser("Minie", "Dingo");
-			buddyService.addContactsToBuddyUser("Minie", "Mickey");
-			buddyService.addContactsToBuddyUser("Minie", "Bugs");
-			
+//			buddyService.addContactsToBuddyUser("Minie", "Mickey");
+//			buddyService.addContactsToBuddyUser("Minie", "Bugs");
+
+//			BuddyUser buddyUserExist = buddyService.findBuddyUserByEmail("roger@gmail.com");
+//			System.out.println(buddyUserExist.getPseudo());
+//			try {
+//				BuddyUser buddyUserExistPas = buddyService.findBuddyUserByEmail("rogerMoore@gmail.com");
+//			} catch (NullPointerException e) {
+//				System.out.println(e.getMessage());
+//			}
 
 			buddyService.addTransfersToBuddyUser("Minie", "Dingo", 10, "Minnie vers Dingo");
 			buddyService.addTransfersToBuddyUser("Minie", "Mickey", 100, "Minnie vers Mickey");
@@ -162,16 +162,14 @@ public class PaymybuddyApplication {
 //			transaction2.setBeneficiary(buddyUser4);
 //			buddyService.saveTransaction(transaction2);
 
-
 		};
-		
+
 	}
+
 //	@Bean
 	CommandLineRunner startBuddy(PayMyBuddyService buddyService) {
-		return args-> {
-			
-			
-			
+		return args -> {
+
 		};
 	}
 

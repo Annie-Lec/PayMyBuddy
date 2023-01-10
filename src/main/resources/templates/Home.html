@@ -23,7 +23,7 @@
 				<h1 class="fs-5 fw-light ">Home</h1>
 			</div>
 			<div class="col-4">
-				<span sec:authentication="name"> </span>
+				<span sec:authorize="isAuthenticated()" sec:authentication="name"> </span>
 			</div>
 
 		</div>

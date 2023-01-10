@@ -6,18 +6,30 @@
 
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>home</title>
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
 <script type="text/javascript"
 	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
 
+<script type="text/javascript">
+	function affichediv(x) {
+		if (x == 0) {
+			document.getElementById("mydivPseudo").style.display = "none";
+			document.getElementById("mydivEmail").style.display = "block";
+		} else {
+			document.getElementById("mydivPseudo").style.display = "block";
+			document.getElementById("mydivEmail").style.display = "none";
+		}
+		return;
+	}
+</script>
 
 </head>
 
-<body>
+<body onload="javascript: affichediv(0)">
 	<div layout:fragment="content1">
 
 		<div class="container-fluid bg-light text-muted  p-3  ">
@@ -32,9 +44,8 @@
 
 		<div>
 			<h2 class="text-danger">Add a new Contact !</h2>
-			<p class="text-dark">Lorem ipsum dolor sit amet, consectetur
-				adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-				dolore magna aliqua.</p>
+			<p class="text-dark">Indicate the email or the pseudo of your new
+				contact</p>
 		</div>
 
 
@@ -43,38 +54,42 @@
 			<div class="card-header">Pay my Buddy</div>
 			<div class="card-body">
 
-
 				<form method="post" th:action="@{/addnewContact}">
 
 					<div>
-						<label>Tape the pseudo of your new contact </label> <input
-							class="form-control" type="text" name="pseudoContact"
-							th:value="${pseudoContact}" />
+						<h3>Search your buddy by ...</h3>
+
+						<input class="form-check-input" type="radio"
+							name="flexRadioDefault" onclick="javascript: affichediv(0)"
+							checked> Email <input class="form-check-input"
+							type="radio" name="flexRadioDefault"
+							onclick="javascript: affichediv(1)"> Pseudo
+
+						<div id="mydivPseudo">
+							<label>Tape the pseudo of your new contact </label> <input
+								class="form-control" type="text" name="pseudoContact"
+								id="pseudoContact" th:value="${pseudoContact}" />
+						</div>
+						<div id="mydivEmail">
+							<label>Tape the email of your new contact </label> <input
+								class="form-control" type="text" name="emailContact"
+								id="emailContact" th:value="${emailContact}" />
+						</div>
 					</div>
-					<br> <span th:if="${exists}" >You have already added
-						this contact in your buddies !</span> <br> 
-						<span >Test du msg : You
-						have already added this contact in your buddies or this buddies does not exist in the App!</span> <br>
 
+					<div th:if="${contactDetailResponse=='NoData'}"
+						class="text-danger fw-bold">This contact doesn't figure in our database : please verify your tape!</div>
+					<div th:if="${contactDetailResponse=='Already'}"
+						class="text-danger fw-bold">You have already added this contact in your buddies !</div>
 
-					<button type="submit" class="btn btn-primary">Save</button>
-
-
-
+					<button type="submit" class="btn btn-primary"
+						onclick="confirmMsg()">Save</button>
 
 				</form>
-
-
-
 			</div>
 		</div>
 
-
-
 	</div>
-
-
-
 
 </body>
 
