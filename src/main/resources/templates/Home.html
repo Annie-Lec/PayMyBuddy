@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="Template1">
@@ -8,9 +8,13 @@
 <head>
 <meta charset="UTF-8">
 <title>home</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
-
+<script type="text/javascript"
+	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/1e22565bce.js"
+	crossorigin="anonymous"></script>
 
 </head>
 
@@ -28,16 +32,19 @@
 
 		</div>
 
-		<div>
-			<h2 class="text-danger">Bienvenue chez Pay My Buddy !</h2>
-			<p class="text-light" >Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-				Mollitia nobis nihil beatae et labore voluptate impedit aliquam,
-				dicta consequatur quia fugit quo est aliquid aspernatur ratione ut
-				nam sed eum</p>
+		<div class="p-3">
+			<h2 class="text-danger">Welcome to <strong>"Pay My Buddy"</strong> !</h2>
+			<p class="p-4 fs-3" >With Pay My Buddy, you can transfer or receive money to your friends easily and with immediate effect.
+			<br></p>
+			<p class="p-4 fs-4 bg-light">You just have to  :
+			 <br>- 1 - create a Profile (including bank details to load your Buddy balance before performing any transaction)
+			 <br>- 2 - fill in your contacts who must also be part of "Pay my Buddy"
+			 <br>- 3 - go to the Transfer menu to make a transfer to your buddy instantly.</p>
 		</div>
 
 	</div>
-
+<script type="text/javascript" src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+	
 </body>
 
 </html>

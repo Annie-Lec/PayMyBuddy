@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="Template1">
@@ -8,23 +8,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>home</title>
+<title>new Transfer</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
 <script type="text/javascript"
 	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
-
+<script src="https://kit.fontawesome.com/1e22565bce.js"
+	crossorigin="anonymous"></script>
 
 </head>
 
 <body>
 	<div layout:fragment="content1">
 
-		<div class="container-fluid bg-light text-muted  p-3  ">
-			<div>
-				<h1 class="fs-5 fw-light ">Contact</h1>
+		<div class="container-fluid row bg-light text-muted  p-3  ">
+			<div class="col-4">
+				<h1 class="fs-5 fw-light ">new Transfer</h1>
 			</div>
-			<div>
+			<div class="col-4">
 				<span sec:authentication="name"></span>
 			</div>
 
@@ -40,25 +42,20 @@
 
 		<div class="container mt-5">
 
-			<div class="card-header">Pay my Buddy</div>
+			<div class="card-header"></div>
 			<div class="card-body">
 
 
-				<form method="post" th:action="@{/addnewTransfer}">
+				<form class="bg-light p-2 " method="post" th:action="@{/addnewTransfer}">
 
-					<!-- 				<div>
-						<label>Choose you buddy beneficiary : </label> <input class="form-control" type="text"
-							name="pseudoContact" th:value="${pseudoContact}" />
-					</div>
-	 -->
-
+					<h3>Select your buddy in the list, tape the amount and Go !</h3>
 
 					<div>
-						<label>Choose you buddy beneficiary : </label> 
-						<select class="form-control" name="pseudoContact" >
+						<label>List of your buddy beneficiaries : </label> <select
+							class="form-control" name="pseudoContact">
 							<option value="0">select beneficiary</option>
-							<option th:each="i : ${listContacts}"
-								th:value="${i}" th:text="${i}"></option>
+							<option th:each="i : ${listContacts}" th:value="${i}"
+								th:text="${i}"></option>
 						</select>
 					</div>
 
@@ -74,11 +71,14 @@
 							th:value="${description}" />
 					</div>
 
-					<!-- 		<br> <span th:if="${exists}">You have already added
-						this contact in your buddies !</span> <br> <span>Test du msg
-						: You have already added this contact in your buddies or this
-						buddies does not exist in the App !</span> <br>
- -->
+					
+					<div class="text-danger fw-bold">
+						<span th:if="${balanceResponse=='balanceKO'}">Be Careful,
+							your balance is insufficient ! <br> Please, charge it in
+							your buddy Profile
+						</span> <br>
+					</div>
+
 
 					<button type="submit" class="btn btn-primary">Transfer</button>
 
@@ -98,6 +98,7 @@
 
 
 
+<script type="text/javascript" src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

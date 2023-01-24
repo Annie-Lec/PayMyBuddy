@@ -8,18 +8,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>contact</title>
+<title>transfer</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
-<!-- <script type="text/javascript" src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>  -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-	integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-	crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script type="text/javascript"
-	th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
+	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/1e22565bce.js"
+	crossorigin="anonymous"></script>
 
 </head>
 
@@ -37,30 +33,31 @@
 
 		</div>
 
-		<div>
+		<div class="p-3">
 			<h2 class="text-danger">Manage your transaction !</h2>
-			<p class="text-dark">Lorem ipsum dolor sit amet, consectetur
-				adipisicing elit. Mollitia nobis nihil beatae et labore voluptate
-				impedit aliquam, dicta consequatur quia fugit quo est aliquid
-				aspernatur ratione ut nam sed eum</p>
+			<p class="p-1 fs-4">Here you can manage your transactions : add a new transfer to one of your buddies and see the historic of all your operations</p>
 		</div>
-		<div class="container mt-5">
-			<div class="card-header">Add a new transaction</div>
+		<div class="container ">
+			<div class="card-header"></div>
+			<h3 class="p-2 fs-4">Send Money</h3>
+			
 			<a class="btn btn-primary" th:href="@{/newTransfer}">Add a
 				connection / transaction</a>
 
 		</div>
 
-		<div class="container mt-5">
+		<div class="container mt-2">
 
-			<div class="card-header">My transactions</div>
+			<div class="card-header" ></div>
+			<h3 class="p-2 fs-4">My transactions</h3>
+			
 			<div class="card-body">
 
 				<form method="get" th:action="@{/transfers}"></form>
 				<div th:if="${listTransactions.size() > 0}">
-					<table class="table">
+					<table class="table table-striped">
 
-						<thead>
+						<thead class="text-light text-center " style="background-color: rgb(92, 184, 92); font-size: 0.9rem; font-family: arial, sans-serif;font-weight: 100;">
 							<tr>
 								<th scope="col">ID</th>
 								<th scope="col">Transmitter</th>
@@ -80,7 +77,7 @@
 								<td>[[${t.transmitter.getPseudo()}]]</td>
 								<td>[[${t.beneficiary.getPseudo()}]]</td>
 								<td>[[${t.amount}]]</td>
-								<td>[[${t.date}]]</td>
+								<td>[[${#dates.format(t.date, 'dd-MMM-yyyy')}]]</td>
 								<td>[[${t.fees}]]</td>
 								<td>[[${t.type}]]</td>
 								<td>[[${t.description}]]</td>
@@ -139,13 +136,13 @@
 					</ul>
 
 				</nav>
-
+<!--  
 				<div>
 					<span> currentPage : [[${currentPage}]]</span> <span>
 						totalPages : [[${totalPages}]]</span> <span> page : [[${page}]]</span> <span>
 						totalItems : [[${totalItems}]]</span>
 				</div>
-
+-->
 
 			</div>
 		</div>
@@ -156,6 +153,7 @@
 
 
 
+<script type="text/javascript" src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

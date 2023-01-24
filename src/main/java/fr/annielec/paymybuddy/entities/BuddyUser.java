@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -33,7 +34,6 @@ import lombok.ToString;
 public class BuddyUser {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 
 	@Column(unique = true)
 	private String pseudo;

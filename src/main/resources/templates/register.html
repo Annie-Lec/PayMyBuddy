@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="Template1">
@@ -9,10 +9,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>home</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
 <script type="text/javascript"
 	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/1e22565bce.js"
+	crossorigin="anonymous"></script>
+
 
 
 </head>
@@ -24,42 +28,57 @@
 			<div>
 				<h1 class="fs-5 fw-light ">Login</h1>
 			</div>
-			<div>
-				<span sec:authentication="name"></span>
-			</div>
+		
 
 		</div>
 
-		<div>
+		<div class="p-3">
 			<h2 class="text-danger">Let's create a new 	account !</h2>
-			<p class="text-dark">Renseignez votre email et choisissez un mot de passe</p>
+			<p class="p-1 fs-4">Enter your email and choose a password</p>
 		</div>
 
 
-		<div class="container mt-5">
+		<div class="container mt-2">
 
-			<div class="card-header">Pay my Buddy</div>
-			<div class="card-body">
+			<div class="card-header"></div>
+			<div class="card-body border border-4 p-3 bg-light">
 
 
 				<form method="get" th:action="@{/register}">
 
-					<div>
-						<label>Email</label> <input class="form-control"
+					
+						<div class="container" style=" border: 1px solid silver; background-color:white;">
+							<div class="d-inline d-sm-inline-block">
+								<i class="fas fa-envelope"></i>
+							</div>
+							 <input class="d-inline col-10" style="border: 1px solid white;"
 							type="email" name="username" placeholder="Email" th:value="${appUser.username}" />
+							<br>
+							
 						<span class="text-danger" th:errors="${appUser.username}"></span>
 					</div>
+					<div th:if="${emailexistbdd=='yes'}">
+					<p class="text-danger">Sorry, this email already exists in our database !
+					<br>Choose another one...
+					</div>
+					<br>
 					<div>
 						<label>Password</label> <input class="form-control"
-							type="password" name="password" placeholder="Password"  th:value="${appUser.password}" /> <span
+							type="password" name="password" placeholder="*******"  th:value="${appUser.password}" /> <span
 							class="text-danger" th:errors="${appUser.password}"></span>
 					</div>
 					<div>
-						<label>Confirm password</label> <input type="password" name="verifyPwd" /> 
+						<label>Confirm password</label> 
+						<input class="form-control" type="password" placeholder="*******" name="verifyPwd" /> 
 					</div>
+					<div th:if="${verifyPwdReponse=='ko'}">
+					<p class="text-danger">Be Careful, your password and your verified password must have been equals !
+					<br>Try again...
+					</div>
+					<br>
 					
 
-					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="submit" class="btn btn-primary">Create my Buddy Account !</button>
 
 
 

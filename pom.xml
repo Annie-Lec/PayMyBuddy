@@ -83,6 +83,13 @@
 
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.webjars.npm/popper.js -->
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>popper.js</artifactId>
+			<version>1.16.1</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="Template1">
@@ -8,7 +8,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>home</title>
+<title>Profile</title>
+<!-- Feuilles de Styles -->
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
 <script type="text/javascript"
@@ -31,62 +33,92 @@
 
 		</div>
 
-		<div>
+		<div class="p-3 ">
 			<h2 class="text-danger">Manage your profile</h2>
-			<p class="text-dark">Lorem ipsum dolor sit amet, consectetur
-				adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-				dolore magna aliqua.</p>
+			<p class="p-1 fs-4 mb-0">Here you can modify your civil information
+				and bank details</p>
 		</div>
 
 
-		<div class="container mt-5">
+		<div class="container mt-0">
 
-			<div class="card-header">Pay my Buddy</div>
+			<div class="card-header"></div>
 			<div class="card-body">
 
 
-				<form method="post" th:action="@{/savemyprofile}">
-					<div>
-						<label>ID </label> <input class="form-control" type="text"
-							readonly="readonly" name="id" th:value="${buddyUser.id}" />
-					</div>
-					<div>
-						<label>Choose your pseudo </label> <input class="form-control"
-							type="text" name="pseudo" th:value="${buddyUser.pseudo}" /> <span
-							class="text-danger" th:errors="${buddyUser.pseudo}"></span>
+				<form class="border p-2" method="post" th:action="@{/savemyprofile}">
+					<div class="mb-1 ">
+						<label>your ID </label> <input class="border-0 "
+							type="text" readonly="readonly" name="id"
+							th:value="${buddyUser.id}" />
 					</div>
 
-					<div>
-						<label>Last Name </label> <input class="form-control" type="text"
-							name="lastName" th:value="${buddyUser.lastName}" /> <span
-							class="text-danger" th:errors="${buddyUser.lastName}"></span>
+					<div class=" row p-2 align-items-center"
+						style="background-color: rgb(92, 184, 92);">
+						<div class="col-4">
+							<label class="text-light"> <strong> Your pseudo
+									is your email : </strong>
+							</label>
+						</div>
+						<div class="col-6">
+							<input style="background-color: rgb(92, 184, 92);"
+								readonly="readonly" class="form-control border-0" type="text"
+								name="pseudo" th:value="${buddyUser.pseudo}" />
+						</div>
 					</div>
-					<div>
-						<label>First Name </label> <input class="form-control" type="text"
-							name="firstName" th:value="${buddyUser.firstName}" /> <span
-							class="text-danger" th:errors="${buddyUser.firstName}"></span>
-					</div>
-					<div>
-						<label>Date Of Birth</label> <input class="form-control"
-							type="date" name="dateDenaissance"
-							th:value="${buddyUser.dateDenaissance}" /> <span
-							class="text-danger" th:errors="${buddyUser.dateDenaissance}"></span>
+					
+
+
+					<div class="bg-light p-2 ">
+						<h3 class=" fs-4">Complete your whole following profile :</h3>
+						<div th:if="${profilDetailResponse=='noData'}"
+							class="text-danger fs-4 fw-bold">Be careful, you miss data
+							for your profile : please enter and save your civil profile to
+							access to your Buddy Account</div>
+
+						<div>
+							<label>Last Name </label> <input class="form-control" type="text"
+								name="lastName" th:value="${buddyUser.lastName}" /> <span
+								class="text-danger" th:errors="${buddyUser.lastName}"></span>
+						</div>
+						<div>
+							<label>First Name </label> <input class="form-control"
+								type="text" name="firstName" th:value="${buddyUser.firstName}" />
+							<span class="text-danger" th:errors="${buddyUser.firstName}"></span>
+						</div>
+						<div>
+							<label>Date Of Birth</label> <input class="form-control"
+								type="date" name="dateDenaissance"
+								th:value="${buddyUser.dateDenaissance}" /> <span
+								class="text-danger" th:errors="${buddyUser.dateDenaissance}"></span>
+						</div>
 					</div>
 
-					<button type="submit" class="btn btn-primary">Save</button>
 
+					<button type="submit" class="btn btn-primary ">Save</button>
 
 
 				</form>
-				<div class="container mt-5">
+				<div class="p-2 ">
+					<div class=" row mt-3 p-2 align-items-center"
+						style="background-color: rgb(92, 184, 92);">
+						<p style="background-color: rgb(92, 184, 92);"
+							class="text-light col-9 fs-6"><strong>If your civil profile is
+							completed, you can manage your buddy account :</strong></p>
+						<div th:if="${profilDetailResponse=='noData'}"
+							class="text-danger fs-4 fw-bold">Please enter and save your
+							civil profile to access to your Buddy Account</div>
 
 
-					<a class="btn btn-primary" th:href="@{/watchmybudyAccount}">Manage
-						your BuddyAccount</a>
-
+						<div class="col-3 text-center">
+							<a class="btn btn-primary "
+								th:if="${profilDetailResponse=='data'}"
+								th:href="@{/watchmybudyAccount}">Manage your BuddyAccount</a>
+						</div>
+					</div>
 				</div>
-
-
+				<input class="border-0 text-white" type="text" readonly="readonly"
+					name="buddyAccount_id" th:value="${buddyUser.buddyAccount.getId()}" />
 
 
 			</div>

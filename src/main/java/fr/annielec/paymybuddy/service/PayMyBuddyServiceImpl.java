@@ -12,18 +12,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.annielec.paymybuddy.entities.AppUser;
 import fr.annielec.paymybuddy.entities.BuddyAccount;
 import fr.annielec.paymybuddy.entities.BuddyUser;
 import fr.annielec.paymybuddy.entities.Contact;
 import fr.annielec.paymybuddy.entities.Transaction;
 import fr.annielec.paymybuddy.entities.TypeContact;
 import fr.annielec.paymybuddy.entities.TypeTransaction;
-import fr.annielec.paymybuddy.repository.AppUserRepository;
+
 import fr.annielec.paymybuddy.repository.BuddyAccountRepository;
-import fr.annielec.paymybuddy.repository.BuddyUserRepository;
+
 import fr.annielec.paymybuddy.repository.ContactRepository;
 import fr.annielec.paymybuddy.repository.TransactionRepository;
+import fr.annielec.paymybuddy.util.CheckTheBalance;
+import fr.annielec.paymybuddy.util.Operations;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -31,187 +32,34 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 
-	private BuddyUserRepository buddyUserRepository;
-	private BuddyAccountRepository buddyAccountRepository;
-	private TransactionRepository transactionRepository;
-	private ContactRepository contactRepository;
-	private AppUserRepository appUserRepository;
+	private final BuddyUserService buddyUserService;
+	private final BuddyAccountRepository buddyAccountRepository;
+	private final TransactionRepository transactionRepository;
+	private final ContactRepository contactRepository;
+	private Operations ope;
+	private CheckTheBalance checkTheBalance;
 
-	@Override
-	public Transaction saveTransaction(Transaction transaction) {
-
-		return transactionRepository.save(transaction);
-	}
-
-	@Override
-	public BuddyUser saveBuddyUser(BuddyUser buddyUser) {
-
-		return buddyUserRepository.save(buddyUser);
-	}
-
-	@Override
-	public BuddyUser saveBuddyUserById(Long id) {
-		BuddyUser buddyUser = buddyUserRepository.findBuddyUserById(id);
-		buddyUserRepository.save(buddyUser);
-		return buddyUser;
-	}
-
-	@Override
-	public Contact saveContacts(Contact contact) {
-
-		return contactRepository.save(contact);
-	}
-
-	@Override
-	public BuddyAccount saveBuddyAccount(BuddyAccount buddyAccount) {
-
-		return buddyAccountRepository.save(buddyAccount);
-	}
-
-	@Override
-	public String addContactsToBuddyUser(String pseudoBuddyUser, String pseudoContact) {
-		BuddyUser buddyUser = buddyUserRepository.findBuddyUserByPseudo(pseudoBuddyUser);
-		//on récupère la liste des contacts du BU
-		List<Contact> actualContacts = findContactByPseudo(pseudoBuddyUser);
-		//initialisation de la variable (newContact, alreadyExist, notInBDD) à new par défaut
-		String exists = TypeContact.NEW_CONTACT.toString();
-
-		try {
-			BuddyUser buddyUser2 = findBuddyUserByPseudo(pseudoContact);
-
-			for (int i = 0; i < actualContacts.size(); i++) {
-
-				if (actualContacts.get(i).getIdContact() == buddyUser2.getId()) {
-					exists = TypeContact.ALREADY_EXISTS.toString();
-				}
-			}
-			//le pseudo Contact est dans la BDD (try ok) mais n'est pas dans actualContacts
-			if (exists == TypeContact.NEW_CONTACT.toString()) {
-				Contact contact = new Contact();
-				contact.setBuddyUser(buddyUser);
-
-				contact.setIdContact(buddyUser2.getId());
-				contact.setActiveStatusContact(true);
-				contactRepository.save(contact);
-
-				buddyUser.getContacts().add(contact);
-				buddyUserRepository.save(buddyUser);
-			}
-		} catch (NullPointerException e) {
-			exists=TypeContact.NOT_IN_BDD.toString();
-			System.out.println(e.getMessage());
-		}
-		return exists;
-
-	}
-	
-	@Override
-	public String addContactsToBuddyUserByEMail(String pseudoBuddyUser, String emailContact) {
-		BuddyUser buddyUser = buddyUserRepository.findBuddyUserByPseudo(pseudoBuddyUser);
-		//on récupère la liste des contacts du BU
-		List<Contact> actualContacts = findContactByPseudo(pseudoBuddyUser);
-		//on initialise de la variable (newContact, alreadyExist, notInBDD) à new par défaut
-		String exists = TypeContact.NEW_CONTACT.toString();
-
-		try {
-			BuddyUser buddyUser2 = findBuddyUserByEmail(emailContact);
-
-			for (int i = 0; i < actualContacts.size(); i++) {
-				//en balayant la liste des actuelcontacts si on trouve qui matche alors already exists !
-				if (actualContacts.get(i).getIdContact() == buddyUser2.getId()) {
-					exists = TypeContact.ALREADY_EXISTS.toString();
-				}
-			}
-			if (exists == TypeContact.NEW_CONTACT.toString()) {
-				Contact contact = new Contact();
-				contact.setBuddyUser(buddyUser);
-
-				contact.setIdContact(buddyUser2.getId());
-				contact.setActiveStatusContact(true);
-				contactRepository.save(contact);
-
-				buddyUser.getContacts().add(contact);
-				buddyUserRepository.save(buddyUser);
-			}
-		} catch (NullPointerException e) {
-			exists=TypeContact.NOT_IN_BDD.toString();
-			System.out.println(e.getMessage());
-		}
-		return exists;
-
-	}
-
-
-	@Override
-	public BuddyUser findBuddyUserByPseudo(String pseudo) throws NullPointerException {
-		BuddyUser buddyUser = buddyUserRepository.findBuddyUserByPseudo(pseudo);
-
-		if (buddyUser == null) {
-			throw new NullPointerException("Pseudo non trouvé dans notre base de données!");
-		}
-
-		return buddyUser;
-	}
-
-	@Override
-	public Long retrieveIdUserWithPseudo(String pseudo) {
-		Long idUser;
-		idUser = buddyUserRepository.findBuddyUserByPseudo(pseudo).getId();
-		return idUser;
-	}
-
-	@Override
-	public String retrievePseudoWithIdUser(Long id) {
-		String pseudoUser;
-		pseudoUser = buddyUserRepository.findBuddyUserById(id).getPseudo();
-		return pseudoUser;
-	}
-
-	@Override
-	public BuddyUser findBuddyUserById(Long id) {
-
-		return buddyUserRepository.findBuddyUserById(id);
-	}
-
-	/*************************** En cours exception à integeerrer */
-	@Override
-	public BuddyUser findBuddyUserByEmail(String email) throws NullPointerException {
-		AppUser appUser = appUserRepository.findUserByUsername(email);
-		BuddyUser buddyUser = null;
-		Long idUser;
-		if (appUser == null) {
-			throw new NullPointerException("Email non trouvé dans notre base de données!");
-		} else {
-			idUser = appUserRepository.findUserByUsername(email).getId();
-			buddyUser = findBuddyUserById(idUser);
-		}
-
-		return buddyUser;
-
-	}
-
+//****** CONTACT***** CONTACT***** CONTACT***** CONTACT***** CONTACT 
 	@Override
 	public List<Contact> findContactByPseudo(String pseudo) {
 		List<Contact> contacts;
 
-		BuddyUser buddyUser = buddyUserRepository.findBuddyUserByPseudo(pseudo);
+		BuddyUser buddyUser = buddyUserService.findBuddyUserByEmail(pseudo);
 
 		contacts = contactRepository.findByBuddyUser(buddyUser);
 		return contacts;
 	}
 
-////************************************************
 	@Override
 	public Page<Contact> findContactByPseudo(String pseudo, Pageable pageable) {
 		Page<Contact> contacts;
 
-		BuddyUser buddyUser = buddyUserRepository.findBuddyUserByPseudo(pseudo);
+		BuddyUser buddyUser = buddyUserService.findBuddyUserByEmail(pseudo);
 
 		contacts = contactRepository.findByBuddyUser(buddyUser, pageable);
 		return contacts;
 	}
 
-/////////////////////////////////////////////////////////
 	@Override
 	public List<BuddyUser> findBuddyUserContactForAPseudo(String pseudo) {
 		List<Contact> contacts = new ArrayList<>();
@@ -220,7 +68,7 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 		contacts = findContactByPseudo(pseudo);
 		contacts.forEach(c -> {
 
-			BuddyUser b = buddyUserRepository.findBuddyUserById(c.getIdContact());
+			BuddyUser b = buddyUserService.findBuddyUserById(c.getIdContact());
 			buddyUserContacts.add(b);
 		});
 
@@ -255,7 +103,7 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 
 			contacts.forEach(c -> {
 
-				BuddyUser b = buddyUserRepository.findBuddyUserById(c.getIdContact());
+				BuddyUser b = buddyUserService.findBuddyUserById(c.getIdContact());
 				buddyUserContacts.add(b);
 
 			});
@@ -270,34 +118,91 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 	}
 
 	@Override
+	public String addContactsToBuddyUserByEMail(String pseudoBuddyUser, String emailContact) throws NullPointerException  {
+		BuddyUser buddyUser = buddyUserService.findBuddyUserByEmail(pseudoBuddyUser);
+		// on récupère la liste des contacts du BU
+		List<Contact> actualContacts = findContactByPseudo(pseudoBuddyUser);
+		// on initialise de la variable (newContact, alreadyExist, notInBDD) à new par
+		// défaut
+		String exists = TypeContact.NEW_CONTACT.toString();
+		
+		
+		 try {
+		BuddyUser buddyUser2 = buddyUserService.findBuddyUserByEmail(emailContact);
+	
+			for (int i = 0; i < actualContacts.size(); i++) {
+				// en balayant la liste des actuelcontacts si on trouve qui matche alors already
+				// exists !
+				if (actualContacts.get(i).getIdContact() == buddyUser2.getId()) {
+					exists = TypeContact.ALREADY_EXISTS.toString();
+				}
+			}
+			if (exists == TypeContact.NEW_CONTACT.toString()) {
+				Contact contact = new Contact();
+				contact.setBuddyUser(buddyUser);
+
+				contact.setIdContact(buddyUser2.getId());
+				contact.setActiveStatusContact(true);
+				contactRepository.save(contact);
+
+				buddyUser.getContacts().add(contact);
+				buddyUserService.saveBuddyUser(buddyUser);
+			}
+	
+		} catch (NullPointerException e){
+			
+			exists = TypeContact.NOT_IN_BDD.toString();
+			System.out.println(e.getMessage());
+	
+		}
+		return exists;
+
+	}
+
+	// ************ ACCOUNT ******************* ACCOUNT ********** ACCOUNT
+	// **********
+	@Override
+	public void updateBalance(Long id, double amount, TypeTransaction typeOperation) {
+		BuddyAccount buddyAccount = buddyAccountRepository.findBuddyAccountById(id);
+		double balance = buddyAccount.getBalance();
+
+		if (typeOperation == TypeTransaction.DEBIT) {
+			balance = ope.debit(balance, amount);
+		} else {
+			balance = ope.credit(balance, amount);
+		}
+		buddyAccount.setBalance(balance);
+		buddyAccountRepository.save(buddyAccount);
+
+	}
+
+	// **** TRANSACTION ******** TRANSACTION ******** TRANSACTION ********
+	// TRANSACTION ****
+
+	@Override
 	public List<Transaction> findBuddyUserTransactionForAPseudo(String pseudo) {
 
 		List<Transaction> transactionsT = new ArrayList<>();
 		List<Transaction> transactionsB = new ArrayList<>();
 		List<Transaction> transactions = new ArrayList<>();
 
-		BuddyUser b = buddyUserRepository.findBuddyUserByPseudo(pseudo);
+		BuddyUser b = buddyUserService.findBuddyUserByEmail(pseudo);
 
 		transactionsT = transactionRepository.findTransactionByTransmitter(b);
 		transactionsT.forEach(t -> {
-			if(t.getType()==null) {
+			if (t.getType() == null) {
 				t.setType(TypeTransaction.DEBIT);
 			}
 
 		});
 		transactions.addAll(transactionsT);
 
-
-//			if(t.getType()==TypeTransaction.SELFSUPPLY && t.getTransmitter()==b) {
-//				transactions.add(t);
-//			}
-	
 		transactionsB = transactionRepository.findTransactionByBeneficiary(b);
 		transactionsB.forEach(t -> {
-			if(t.getType()==null)
+			if (t.getType() == null)
 				t.setType(TypeTransaction.CREDIT);
 		});
-				
+
 		transactions.addAll(transactionsB);
 
 		return transactions;
@@ -319,141 +224,101 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 		return buddyUserTransactionsPage;
 	}
 
-
-	@Override
-	public BuddyAccount findAccountByPseudo(String pseudo) {
-		BuddyAccount buddyAccount;
-		BuddyUser buddyUser = buddyUserRepository.findBuddyUserByPseudo(pseudo);
-		buddyAccount = buddyAccountRepository.findByBuddyUser(buddyUser);
-		return buddyAccount;
-	}
-
-	@Override
-	public void addBuddyAccountToBuddyUser(Long id) {
-		BuddyUser buddyUser = buddyUserRepository.findBuddyUserById(id);
-		BuddyAccount buddyAccount = buddyAccountRepository.findBuddyAccountById(id);
-
-		buddyAccount.setBuddyUser(buddyUser);
-		buddyAccountRepository.save(buddyAccount);
-
-	}
-
-	@Override
-	public BuddyAccount findBuddyAccountById(Long id) {
-
-		return buddyAccountRepository.findBuddyAccountById(id);
-	}
-
-	@Override
-	public void creditBalance(Long id, double amount) {
-		BuddyAccount buddyAccount = buddyAccountRepository.findBuddyAccountById(id);
-		double balance = buddyAccount.getBalance();
-		balance += amount;
-		buddyAccount.setBalance(balance);
-		buddyAccountRepository.save(buddyAccount);
-	}
-
-	@Override
-	public void debitBalance(Long id, double amount) {
-		BuddyAccount buddyAccount = buddyAccountRepository.findBuddyAccountById(id);
-		double balance = buddyAccount.getBalance();
-		balance -= amount;
-		buddyAccount.setBalance(balance);
-		buddyAccountRepository.save(buddyAccount);
-
-	}
-
 	@Override
 	public boolean addTransfersToBuddyUser(String pseudoBuddyUser, String pseudoContact, double amount,
 			String description) {
-		BuddyUser transmitter = buddyUserRepository.findBuddyUserByPseudo(pseudoBuddyUser);
-		BuddyUser beneficiary = buddyUserRepository.findBuddyUserByPseudo(pseudoContact);
-		// List<Contact> actualContacts = findContactByPseudo(pseudoBuddyUser);
+		BuddyUser transmitter = buddyUserService.findBuddyUserByEmail(pseudoBuddyUser);
+		BuddyUser beneficiary = buddyUserService.findBuddyUserByEmail(pseudoContact);
 		double balance;
+		double fees;
 
 		balance = buddyAccountRepository.findByBuddyUser(transmitter).getBalance();
+		fees = ope.calculFees(amount);
 
 		boolean balanceIsEnough = false;
 
-		if (balance >= amount) {
-
+		if (checkTheBalance.ItsGoodEnough(balance, amount, fees)) {
+			// if (balance >= amount) {
 			balanceIsEnough = true;
 			Transaction transaction = new Transaction();
 
 			transaction.setAmount(amount);
 			transaction.setBeneficiary(beneficiary);
 			transaction.setTransmitter(transmitter);
+			transaction.setFees(fees);
 			transaction.setDate(new Date());
 			transaction.setDescription(description);
-			saveTransaction(transaction);
+			transactionRepository.save(transaction);
 			transmitter.getTransactions().add(transaction);
 			beneficiary.getTransactions().add(transaction);
-			buddyUserRepository.save(transmitter);
-			buddyUserRepository.save(beneficiary);
-			saveTransaction(transaction);
+			buddyUserService.saveBuddyUser(transmitter);
+			buddyUserService.saveBuddyUser(beneficiary);
+			transactionRepository.save(transaction);
 
-			creditBalance(beneficiary.getId(), amount);
-			debitBalance(transmitter.getId(), amount);
+			updateBalance(beneficiary.getId(), amount, TypeTransaction.CREDIT);
+			updateBalance(transmitter.getId(), amount + fees, TypeTransaction.DEBIT);
 
 		}
 		return balanceIsEnough;
 	}
-	
-	
+
 	@Override
-	public void addTransfersToBuddyUserFromAccount(Long idBuddyUser, double amount,
-			String description, TypeTransaction typeTransaction) {
-		BuddyUser transmitter = buddyUserRepository.findBuddyUserById(idBuddyUser);
-		BuddyUser beneficiary = buddyUserRepository.findBuddyUserById(idBuddyUser);
-//		double balance;
-//
-//		balance = buddyAccountRepository.findByBuddyUser(transmitter).getBalance();
-//
-//		if (balance >= amount) {
+	public void addTransfersToBuddyUserFromAccount(Long idBuddyUser, double amount, String description,
+			TypeTransaction typeTransaction) {
+		BuddyUser transmitter = buddyUserService.findBuddyUserByEmail("bank@bank.com");
+		BuddyUser beneficiary = buddyUserService.findBuddyUserById(idBuddyUser);
 
-			Transaction transaction = new Transaction();
+		double fees = ope.calculFees(amount);
 
-			transaction.setAmount(amount);
-			transaction.setBeneficiary(beneficiary);
-			transaction.setTransmitter(transmitter);
-			transaction.setDate(new Date());
-			transaction.setDescription(description);
-			transaction.setType(typeTransaction);
-			saveTransaction(transaction);
-			transmitter.getTransactions().add(transaction);
-			buddyUserRepository.save(transmitter);
-			saveTransaction(transaction);
+		Transaction transaction = new Transaction();
 
-	//	}
-		
+		transaction.setAmount(amount);
+		transaction.setFees(fees);
+		transaction.setBeneficiary(beneficiary);
+		transaction.setTransmitter(transmitter);
+		transaction.setDate(new Date());
+		transaction.setDescription(description);
+		transaction.setType(typeTransaction);
+		transactionRepository.save(transaction);
+		beneficiary.getTransactions().add(transaction);
+		buddyUserService.saveBuddyUser(beneficiary);
+		transactionRepository.save(transaction);
+
+		updateBalance(beneficiary.getId(), amount, TypeTransaction.CREDIT);
+
 	}
-	
+
 	@Override
-	public void addTransfersToBuddyUserForBankAccount(Long idBuddyUser, double amount,
-			String description, TypeTransaction typeTransaction) {
-		BuddyUser transmitter = buddyUserRepository.findBuddyUserById(idBuddyUser);
-		BuddyUser beneficiary = buddyUserRepository.findBuddyUserById(idBuddyUser);
+	public boolean addTransfersForBuddyUserToBankAccount(Long idBuddyUser, double amount, String description,
+			TypeTransaction typeTransaction) {
+		BuddyUser transmitter = buddyUserService.findBuddyUserById(idBuddyUser);
+		BuddyUser beneficiary = buddyUserService.findBuddyUserByEmail("bank@bank.com");
 		double balance;
-//
+
 		balance = buddyAccountRepository.findByBuddyUser(transmitter).getBalance();
-//
-		if (balance >= amount) {
+		double fees = ope.calculFees(amount);
+		boolean transferOK = checkTheBalance.ItsGoodEnough(balance, amount, fees);
+
+		if (transferOK == true) {
 
 			Transaction transaction = new Transaction();
 
 			transaction.setAmount(amount);
+			transaction.setFees(fees);
 			transaction.setBeneficiary(beneficiary);
 			transaction.setTransmitter(transmitter);
 			transaction.setDate(new Date());
 			transaction.setDescription(description);
 			transaction.setType(typeTransaction);
-			saveTransaction(transaction);
-			beneficiary.getTransactions().add(transaction);
-			buddyUserRepository.save(beneficiary);
-			saveTransaction(transaction);
+			transactionRepository.save(transaction);
+			transmitter.getTransactions().add(transaction);
+			buddyUserService.saveBuddyUser(transmitter);
+
+			updateBalance(transmitter.getId(), amount + fees, TypeTransaction.DEBIT);
 
 		}
-		
+		return transferOK;
+
 	}
 
 }

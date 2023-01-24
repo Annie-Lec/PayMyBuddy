@@ -94,18 +94,20 @@ public class SecurityServiceImpl implements SecurityService {
 		BuddyAccount buddyAccount = new BuddyAccount();
 
 		buddyUserRepository.save(buddyUser);
+		buddyAccountRepository.save(buddyAccount);
+		
 		buddyUser = buddyUserRepository.findBuddyUserById(appUser.getId());
-		buddyUser.setPseudo("pseudo" + buddyUser.getId());
+		buddyAccount = buddyAccountRepository.findBuddyAccountById(appUser.getId());
+		
+		buddyUser.setPseudo(username);
 		buddyUser.setBuddyAccount(buddyAccount);
 		buddyUserRepository.save(buddyUser);
-
-		buddyAccountRepository.save(buddyAccount);
-		buddyAccount = buddyAccountRepository.findBuddyAccountById(appUser.getId());
+		
 		buddyAccount.setBuddyUser(buddyUser);
 		buddyAccountRepository.save(buddyAccount);
 
 		appUser.setBuddyUser(buddyUser);
-		addRoleToUser(username, "USER");
+		addRoleToUser(username, "1PROFIL_TO_DEF");
 		appUserRepository.save(appUser);
 	}
 
@@ -124,6 +126,20 @@ public class SecurityServiceImpl implements SecurityService {
 		AppUser saveAppUser = appUserRepository.save(appUser);
 
 		return saveAppUser;
+	}
+
+	@Override
+	public void saveNewRole(String role, String description) {
+		AppRole appRole = new AppRole();
+
+		if (appRoleRepository.findRoleByRoleName(role) != null)
+			throw new RuntimeException("Role name already exists");
+		appRole.setRoleName(role);
+		appRole.setDescription(description);
+
+		appRoleRepository.save(appRole);
+
+				
 	}
 
 }

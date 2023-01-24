@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import fr.annielec.paymybuddy.service.UserDetailsServiceImpl;
 
@@ -31,15 +32,13 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	
-	//	http.authorizeRequests().antMatchers("/transfer/**","/updatemyprofile/**", "/contacts/**").hasAuthority("ROLE_USER");
-	//	http.authorizeRequests().and().formLogin().loginPage("/login.html").permitAll().and().rememberMe().key("uniqueAndSecret");
 		//page Home accessible à tous même sans connexion
 		http.authorizeRequests().antMatchers("/", "/home/**", "/register/**", "/login/**").permitAll();
 		// attention aux accès aux répertoires static qui contiennent les css!! Si on
 		// donne l accès au menu home à tt le monde par ex...
-		http.authorizeRequests().antMatchers("/webjars/**","/media/**" ).permitAll();
+		http.authorizeRequests().antMatchers("/webjars/**","/media/**","/css/**" ).permitAll();
 		
-		//http.authorizeRequests().anyRequest().authenticated();
+		//autres pages : utilisateur doit être authenticated();
 		http.authorizeRequests()
         .antMatchers("/anonymous*")
         .anonymous()
@@ -49,9 +48,12 @@ public class SecurityConfig {
         .authenticated()
         .and()
         .formLogin()
-        .loginPage("/login.html")
-        .loginProcessingUrl("/login")
-        .failureUrl("/login.html?error=true")
+        .loginPage("/login")
+        .usernameParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY)
+        .passwordParameter(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_PASSWORD_KEY)
+        .defaultSuccessUrl("/")
+        //TODO validation page
+ //       .failureUrl("/login.html?error=true")
         .and()
         .logout()
         .deleteCookies("JSESSIONID")

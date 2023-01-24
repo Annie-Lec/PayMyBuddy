@@ -12,8 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import fr.annielec.paymybuddy.entities.AppUser;
+
 /**
- * Cette classe qui implemente userdetailservice permet 
+ * Cette classe qui implemente userdetailservice permet
+ * 
  * @author aNewL
  *
  */
@@ -32,10 +34,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		this.securityService = securityService;
 	}
 
+	/**
+	 * cette méthode va permettre à Spring Security d'avoir accès aux informations
+	 * d'un utilisateur (mot de passe, roles) à partir d'un nom utilisateur
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		//avec ma couche service je vais cherche le user en base
-		AppUser appUser=securityService.loadUserByUsername(username);
+		// avec ma couche service je vais cherche le user en base
+		AppUser appUser = securityService.loadUserByUsername(username);
 		Collection<GrantedAuthority> authorities = new ArrayList<>();
 		appUser.getAppRoles().forEach(role -> {
 			SimpleGrantedAuthority authority = new SimpleGrantedAuthority(role.getRoleName());

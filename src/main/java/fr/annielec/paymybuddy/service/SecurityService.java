@@ -20,6 +20,7 @@ public interface SecurityService {
 	//pour lier au groupe buddy
 		void AddBuddyUserToUser(String username, String pseudo);
 		public void AddBuddyUserToUser(String username);
-	//	public void AddBuddyAccountToBuddyUser(String pseudo);
+	public void saveNewRole(String role, String description);
+
 
 }

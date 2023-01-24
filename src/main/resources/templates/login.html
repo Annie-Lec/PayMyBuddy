@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="Template1">
@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>home</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
 <script type="text/javascript"
@@ -33,47 +34,55 @@
 
 		</div>
 
-		<div>
+		<div class="p-3">
 			<h2 class="text-danger">Log to your account</h2>
-			<p class="text-dark">If you have already an account to 'Pay My
+			<p class="p-1 fs-4">If you have already an account to 'Pay My
 				Buddy' please indicate your credentials to log in. OrElse, click on
 				the link 'Register here' to create a new account.</p>
 		</div>
 
 
-		<div class="container mt-5" style=" border: 1px solid silver; background-color:white;">
+		<div class="container mt-5 border border-4"
+			style="background-color: white;">
 
-			<div class="card-header fw-bold">Already have a Buddy account?<br></div>
+			<div class="p-2 fs-5">
+				Already have a Buddy account?<br>
+			</div>
 			<div class="card-body">
 
 
 				<form method="post" th:action="@{/login}">
-
-					<div th:if="${param.error}" class="alert alert-error" style="color:red;">
-						Invalid username or password !</div>
-
+	
+					<div th:if="${param.error}">
+						<div class="alert alert-danger">Invalid username or password
+							!</div>
+					</div>
 					<div class="m-2">
 						<label> </label>
-						<div class="container" style=" border: 1px solid silver; background-color:white;">
+						<div class="container"
+							style="border: 1px solid silver; background-color: white;">
 							<div class="d-inline d-sm-inline-block">
 								<i class="fas fa-envelope"></i>
 							</div>
-							
-							<input class="d-inline col-10" style="border: 1px solid white;" type="text" name="username"
-									placeholder="Email" th:value="${appUser.username}" />
-							
+
+							<input class="d-inline col-10" style="border: 1px solid white;"
+								type="text" name="username" placeholder="Email"
+								th:value="${appUser.username}" />
+
 						</div>
-						
+
 					</div>
 					<div div class="m-2">
 						<label> </label>
-						<div class="container"	style="border: 1px solid silver; background-color:white">
-							<div class="d-inline d-sm-inline-block text-dark"> 
+						<div class="container"
+							style="border: 1px solid silver; background-color: white">
+							<div class="d-inline d-sm-inline-block text-dark">
 								<i class="fas fa-asterisk"></i>
 							</div>
-						
-							<input class="d-inline col-10" style="border: 1px solid white;" type="password" name="password"
-								placeholder="Password" th:value="${appUser.password}" />
+
+							<input class="d-inline col-10" style="border: 1px solid white;"
+								type="password" name="password" placeholder="Password"
+								th:value="${appUser.password}" />
 						</div>
 					</div>
 					<div class="fst-italic m-1">
@@ -87,8 +96,9 @@
 
 				</form>
 
-				<div class=" fw-bold"><br>
-					Don't have a Buddy account yet? <a th:href="@{/register}">Register here</a>
+				<div class="p-2 fs-5">
+					<br> Don't have a Buddy account yet? <a th:href="@{/register}">Register
+						here</a>
 				</div>
 
 			</div>
@@ -97,7 +107,6 @@
 
 
 	</div>
-
 
 
 

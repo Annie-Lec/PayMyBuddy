@@ -19,11 +19,13 @@ import lombok.NoArgsConstructor;
 public class BuddyAccount {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@Min(value = 0)
 	private double balance;
-	@Size(min=27, max=27)
 	
+	@Size(min=27, max=27)
 	private String iban;
+	
 	@Size(max =  40)
 	private String bankName;
 	

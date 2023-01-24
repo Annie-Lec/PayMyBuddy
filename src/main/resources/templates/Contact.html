@@ -9,17 +9,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>contact</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
-<!-- <script type="text/javascript" src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>  -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-	integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-	crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script type="text/javascript"
-	th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-
+	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/1e22565bce.js"
+	crossorigin="anonymous"></script>
 
 </head>
 
@@ -37,28 +33,27 @@
 
 		</div>
 
-		<div>
+		<div class="p-3">
 			<h2 class="text-danger">Manage your contacts !</h2>
-			<p class="text-dark">Here you are the list of the contacts you have already added : before transfer money to one buddy, be sure he's in the list.
+			<p class="p-1 fs-4">Here you are the list of the contacts you have already added : before transfer money to one buddy, be sure he's in the list.
 			<br>Or Else, click on 'Add a contact' button! </p>
 		</div>
-		<div class="container mt-5">
-			<div class="card-header">Add a new contact</div>
+		<div class="container mt-2 " >
+			<h3 class=" p-2 fs-4 ">Add a new contact : </h3>
 			<a class="btn btn-primary" th:href="@{/newContact}">Add a contact</a>  
-			<!-- <button type="submit" class="btn btn-primary" th:href="@{/newContact}">Add a contact</button> -->
 		
 		</div>
 
-		<div class="container mt-5">
+		<div class="container mt-2">
 
-			<div class="card-header">My contacts</div>
+			<h3 class="p-2 fs-4">My contacts</h3>
 			<div class="card-body">
 
 				<form method="get" th:action="@{/contacts}"></form>
 				<div th:if="${listContacts.size() > 0}">
 					<table class="table">
 
-						<thead>
+						<thead class="text-light text-center " style="background-color: rgb(92, 184, 92); font-size: 0.9rem; font-family: arial, sans-serif;font-weight: 100;">
 							<tr>
 								<th scope="col">ID</th>
 								<th scope="col">Pseudo</th>
@@ -132,13 +127,13 @@
 					</ul>
 
 				</nav>
-
+<!--  
 				<div>
 					<span> currentPage : [[${currentPage}]]</span> <span>
 						totalPages : [[${totalPages}]]</span> <span> page : [[${page}]]</span> <span>
 						totalItems : [[${totalItems}]]</span>
 				</div>
-
+-->
 
 			</div>
 		</div>
@@ -148,7 +143,7 @@
 	</div>
 
 
-
+<script type="text/javascript" src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

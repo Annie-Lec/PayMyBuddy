@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="Template1">
@@ -8,41 +8,32 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>home</title>
+<title>new Contact</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
 <script type="text/javascript"
 	src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://kit.fontawesome.com/1e22565bce.js"
+	crossorigin="anonymous"></script>
 
-<script type="text/javascript">
-	function affichediv(x) {
-		if (x == 0) {
-			document.getElementById("mydivPseudo").style.display = "none";
-			document.getElementById("mydivEmail").style.display = "block";
-		} else {
-			document.getElementById("mydivPseudo").style.display = "block";
-			document.getElementById("mydivEmail").style.display = "none";
-		}
-		return;
-	}
-</script>
 
 </head>
 
-<body onload="javascript: affichediv(0)">
+<body >
 	<div layout:fragment="content1">
 
-		<div class="container-fluid bg-light text-muted  p-3  ">
-			<div>
+		<div class="container-fluid row bg-light text-muted  p-3  ">
+			<div class="col-4">
 				<h1 class="fs-5 fw-light ">Contact</h1>
 			</div>
-			<div>
+			<div class="col-4">
 				<span sec:authentication="name"></span>
 			</div>
 
 		</div>
 
-		<div>
+		<div class="p-3">
 			<h2 class="text-danger">Add a new Contact !</h2>
 			<p class="text-dark">Indicate the email or the pseudo of your new
 				contact</p>
@@ -51,25 +42,15 @@
 
 		<div class="container mt-5">
 
-			<div class="card-header">Pay my Buddy</div>
+			<div class="card-header"></div>
 			<div class="card-body">
 
-				<form method="post" th:action="@{/addnewContact}">
+				<form class="bg-light p-2 " method="post" th:action="@{/addnewContact}">
 
 					<div>
-						<h3>Search your buddy by ...</h3>
+						<h3>Search your buddy by his email</h3>
+						<br>
 
-						<input class="form-check-input" type="radio"
-							name="flexRadioDefault" onclick="javascript: affichediv(0)"
-							checked> Email <input class="form-check-input"
-							type="radio" name="flexRadioDefault"
-							onclick="javascript: affichediv(1)"> Pseudo
-
-						<div id="mydivPseudo">
-							<label>Tape the pseudo of your new contact </label> <input
-								class="form-control" type="text" name="pseudoContact"
-								id="pseudoContact" th:value="${pseudoContact}" />
-						</div>
 						<div id="mydivEmail">
 							<label>Tape the email of your new contact </label> <input
 								class="form-control" type="text" name="emailContact"
@@ -81,15 +62,16 @@
 						class="text-danger fw-bold">This contact doesn't figure in our database : please verify your tape!</div>
 					<div th:if="${contactDetailResponse=='Already'}"
 						class="text-danger fw-bold">You have already added this contact in your buddies !</div>
-
+	<br>
 					<button type="submit" class="btn btn-primary"
-						onclick="confirmMsg()">Save</button>
+						onclick="confirmMsg()">Add</button>
 
 				</form>
 			</div>
 		</div>
 
 	</div>
+<script type="text/javascript" src="/webjars/bootstrap/5.2.2/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

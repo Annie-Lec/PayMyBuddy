@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="fr" xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	layout:decorate="Template1">
@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>home</title>
+<title>bank account</title>
 <link rel="stylesheet"
 	href="/webjars/bootstrap/5.2.2/css/bootstrap.min.css">
 <script type="text/javascript"
@@ -32,56 +32,62 @@
 		</div>
 
 		<div>
-			<h2 class="text-danger">Charge your buddy Account</h2>
+			<h2 class="text-danger p-2">Charge your bank Account</h2>
 		</div>
 
 
 		<div class="container mt-4">
 
-			<div class="card-header">Profile / Transfer to your Bank
-				Account</div>
+			<div class="card-header"></div>
 			<div class="card-body">
 
 
 				<form method="post" th:action="@{/debitMyBuddyAccount}">
-					<div>
-						<label>ID </label> <input class="form-control" type="text"
-							name="id" th:value="${buddyAccount.id}" />
+					<div class="border-0 bg-light">
+						<label>ID </label> <input class="border-0 bg-light" type="text" name="id"
+							th:value="${buddyAccount.id}" />
 					</div>
 
 
 
-					<h3 class="p-2">Your bank details</h3>
-					<div>
-						<label>IBAN </label> <input class="form-control" type="text"
+					<h3 class="p-2 fs-4">Your bank details</h3>
+					<div class="p-2 border border-4">
+						<label>IBAN : </label> <input class="border-0" type="text"
 							readonly="readonly" name="iban" th:value="${buddyAccount.iban}" />
-					</div>
-					<div>
-						<label>Bank Name </label> <input class="form-control" type="text"
-							readonly="readonly" name="bankName"
-							th:value="${buddyAccount.bankName}" />
-					</div>
 
-					<div class="container mt-2">
-						<label>Balance </label> <input class="form-control" type="text"
-							readonly="readonly" name="balance"
-							th:value="${buddyAccount.balance}" /> <br>
-					</div>
+						<div>
+							<label>Bank Name : </label> <input class="border-0" type="text"
+								readonly="readonly" name="bankName"
+								th:value="${buddyAccount.bankName}" />
+						</div>
 
+						<div class=" mt-2">
+							<label>Balance : </label> <input class="border-0" type="text"
+								readonly="readonly" name="balance"
+								th:value="${buddyAccount.balance}" />
+						</div>
 
-					<div>
-						<h3 class=" p-2 fw-bolder font-monospace">Indicate the amount
-							to transfer to your bank account :</h3>
 					</div>
 
-					<div>
-						<label>transfer amount :</label> <input type="text"
-							name="amountToCharge" th:value="${buddyAccount.amountToCharge}" />
+					<br>
+					<div >
+						<h3 class=" p-2 fs-4 fw-bolder font-monospace">Indicate the
+							amount to transfer to your bank account :</h3>
+
+						<div class="p-2 " style="background-color: rgb(92, 184, 92);">
+							<div>
+								<label>transfer amount :</label> <input type="text"
+									name="amountToCharge" th:value="${buddyAccount.amountToCharge}" />
+							</div>
+							<div th:if="${reponseBalance=='ko'}"
+								class="text-danger fs-4 fw-bold">Sorry the amount you want
+								to transfer to your bank account exceeds your buddy balance !</div>
+
+
+							<button type="submit" class="btn btn-primary"
+								onclick="return confirm('Are you sure you want to debit your buddy account?')">Charge</button>
+						</div>
 					</div>
-
-
-					<button type="submit" class="btn btn-primary" onclick="return confirm('Are you sure you want to debit your buddy account?')">Charge</button>
-
 				</form>
 
 			</div>
