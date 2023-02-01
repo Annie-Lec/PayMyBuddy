@@ -30,7 +30,7 @@ public class PaymybuddyApplication {
 		return new BCryptPasswordEncoder();
 	}
 
-	@Bean
+//	@Bean
 	CommandLineRunner start(SecurityService securityService, PayMyBuddyService buddyService, BuddyUserService buddyUserService, BuddyAccountService accountService) {
 		return args -> {
 			

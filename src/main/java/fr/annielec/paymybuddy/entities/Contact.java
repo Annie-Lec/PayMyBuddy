@@ -21,25 +21,13 @@ public class Contact {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-//	private String pseudo;
-//	private String lastName;
-//	private String firstName;
-
-//	@OneToOne(mappedBy = "monContact")
-//	private BuddyUser myContactId;
 
 	private Long idContact;
 
-//	@ManyToMany
-//	@JoinTable( name = "T_BuddyUsers_Contacts_Associations",
-//		joinColumns = @JoinColumn( name = "idContact" ),
-//		inverseJoinColumns = @JoinColumn( name = "idBuddyUser" ) )
 	@ManyToOne
 	private BuddyUser buddyUser;
 
 	private boolean activeStatusContact;
 
-//	@OneToMany(fetch = FetchType.LAZY)
-//	private Collection<Transaction> transaction;
 
 }

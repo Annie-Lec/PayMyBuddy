@@ -93,14 +93,15 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 	@Override
 	public Page<BuddyUser> findBuddyUserContactForAPseudo(String pseudo, Pageable pageable) {
 
-		Page<Contact> contacts;
+		Page<Contact> contacts = null;
 		List<BuddyUser> buddyUserContacts = new ArrayList<BuddyUser>();
 		Page<BuddyUser> buddyUserContactsPage = null;
-		;
 
-		try {
-			contacts = findContactByPseudo(pseudo, pageable);
-
+		contacts = findContactByPseudo(pseudo, pageable);
+		
+		if (contacts == null) {
+			throw new NullPointerException("Aucun contact trouvé dans notre base de données!");
+		} else {
 			contacts.forEach(c -> {
 
 				BuddyUser b = buddyUserService.findBuddyUserById(c.getIdContact());
@@ -109,8 +110,6 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 			});
 			buddyUserContactsPage = new PageImpl<BuddyUser>(buddyUserContacts, pageable, buddyUserContacts.size());
 
-		} catch (Exception e) {
-			System.out.println("");
 		}
 
 		return buddyUserContactsPage;
@@ -118,18 +117,18 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 	}
 
 	@Override
-	public String addContactsToBuddyUserByEMail(String pseudoBuddyUser, String emailContact) throws NullPointerException  {
+	public String addContactsToBuddyUserByEMail(String pseudoBuddyUser, String emailContact)
+			throws NullPointerException {
 		BuddyUser buddyUser = buddyUserService.findBuddyUserByEmail(pseudoBuddyUser);
 		// on récupère la liste des contacts du BU
 		List<Contact> actualContacts = findContactByPseudo(pseudoBuddyUser);
 		// on initialise de la variable (newContact, alreadyExist, notInBDD) à new par
 		// défaut
 		String exists = TypeContact.NEW_CONTACT.toString();
-		
-		
-		 try {
-		BuddyUser buddyUser2 = buddyUserService.findBuddyUserByEmail(emailContact);
-	
+
+		try {
+			BuddyUser buddyUser2 = buddyUserService.findBuddyUserByEmail(emailContact);
+
 			for (int i = 0; i < actualContacts.size(); i++) {
 				// en balayant la liste des actuelcontacts si on trouve qui matche alors already
 				// exists !
@@ -148,12 +147,12 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 				buddyUser.getContacts().add(contact);
 				buddyUserService.saveBuddyUser(buddyUser);
 			}
-	
-		} catch (NullPointerException e){
-			
+
+		} catch (NullPointerException e) {
+
 			exists = TypeContact.NOT_IN_BDD.toString();
 			System.out.println(e.getMessage());
-	
+
 		}
 		return exists;
 

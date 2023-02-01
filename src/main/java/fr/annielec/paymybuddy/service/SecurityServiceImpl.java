@@ -1,6 +1,5 @@
 package fr.annielec.paymybuddy.service;
 
-import java.util.List;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,15 +37,15 @@ public class SecurityServiceImpl implements SecurityService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
-	@Override
-	public AppUser addNewUser(AppUser appUser) {
-		return appUserRepository.save(appUser);
-	}
+//	@Override
+//	public AppUser addNewUser(AppUser appUser) {
+//		return appUserRepository.save(appUser);
+//	}
 
-	@Override
-	public AppRole addNewRole(AppRole appRole) {
-		return appRoleRepository.save(appRole);
-	}
+//	@Override
+//	public AppRole addNewRole(AppRole appRole) {
+//		return appRoleRepository.save(appRole);
+//	}
 
 	@Override
 	public void addRoleToUser(String username, String roleName) {
@@ -68,15 +67,15 @@ public class SecurityServiceImpl implements SecurityService {
 		return appUser.getId();
 	}
 
-	@Override
-	public List<AppUser> listUsers() {
-		return appUserRepository.findAll();
-	}
+//	@Override
+//	public List<AppUser> listUsers() {
+//		return appUserRepository.findAll();
+//	}
 
-	@Override
-	public void removeUser(AppUser appUser) {
-		appUserRepository.delete(appUser);
-	}
+//	@Override
+//	public void removeUser(AppUser appUser) {
+//		appUserRepository.delete(appUser);
+//	}
 
 	@Override
 	public void AddBuddyUserToUser(String username, String pseudo) {
