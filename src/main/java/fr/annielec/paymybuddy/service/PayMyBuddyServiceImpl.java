@@ -163,21 +163,16 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 	@Override
 	public void updateBalance(Long id, double amount, TypeTransaction typeOperation) {
 		BuddyAccount buddyAccount = buddyAccountRepository.findBuddyAccountById(id);
-		System.out.println(21);
-
+		
 		double balance = buddyAccount.getBalance();
-		System.out.println(22);
+		
 		if (typeOperation == TypeTransaction.DEBIT) {
-			System.out.println(23);
 			balance = ope.debit(balance, amount);
 		} else {
 			balance = ope.credit(balance, amount);
-			System.out.println(24);
 		}
 		buddyAccount.setBalance(balance);
-		System.out.println(25);
 		buddyAccountRepository.save(buddyAccount);
-		System.out.println(26);
 
 	}
 
@@ -254,26 +249,22 @@ public class PayMyBuddyServiceImpl implements PayMyBuddyService {
 			transaction.setTransmitter(transmitter);
 			transaction.setFees(fees);
 			transaction.setDate(new Date());
-			System.out.println(31);
+			
 			transaction.setDescription(description);
 			transactionRepository.save(transaction);
-			System.out.println(32);
+			
 			transmitter.getTransactions().add(transaction);
 			beneficiary.getTransactions().add(transaction);
-			System.out.println(33);
+			
 			buddyUserService.saveBuddyUser(transmitter);
-			System.out.println(34);
+			
 			buddyUserService.saveBuddyUser(beneficiary);
-			System.out.println(35);
+			
 			
 			transactionRepository.save(transaction);
-			System.out.println(1);
-
+			
 			updateBalance(beneficiary.getId(), amount, TypeTransaction.CREDIT);
-			System.out.println(2);
-		
 			updateBalance(transmitter.getId(), amount + fees, TypeTransaction.DEBIT);
-			System.out.println(3);
 
 		}
 		return balanceIsEnough;

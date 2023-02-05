@@ -36,7 +36,9 @@ import fr.annielec.paymybuddy.service.SecurityService;
 import fr.annielec.paymybuddy.service.UserDetailsServiceImpl;
 import fr.annielec.paymybuddy.util.Operations;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 @AllArgsConstructor
 public class PayMyBuddyController {
@@ -74,6 +76,8 @@ public class PayMyBuddyController {
 		model.addAttribute("page", page);
 
 		model.addAttribute("pageSize", size);
+		
+		log.info("Display Page Contact");
 
 		return "Contact";
 	}
@@ -88,22 +92,27 @@ public class PayMyBuddyController {
 			appUserEnBase = securityService.loadUserByUsername(username);
 			if (appUserEnBase != null) {
 				model.addAttribute("emailexistbdd", "yes");
+				log.error("Display Page register : user already exists");
+
 				return "/register";
 			}
 		} catch (NullPointerException e) {
+			log.info("Mapping register OK");
 			System.out.println("app user pas encore en base, tant mieux");
 		}
 
 		if (bindingResult.hasErrors()) {
+			log.error("Error during register : problem of data validation");
 			return "/register";
 		} else if (!password.equals(verifyPwd)) {
+			log.error("Error during register : problem of password");
 			model.addAttribute("verifyPwdReponse", "ko");
 			return "/register";
 
 		} else {
 			appUser = securityService.saveNewUser(username, password, verifyPwd);
 			securityService.AddBuddyUserToUser(username);
-
+			log.info("Mapping register OK : redirect on login page");
 			return "redirect:/login";
 		}
 
@@ -112,13 +121,14 @@ public class PayMyBuddyController {
 	@GetMapping("/login")
 	public String connect(Model model, @Valid AppUser appUser, BindingResult bindingResult,
 			@RequestParam(defaultValue = "") String username, @RequestParam(defaultValue = "") String password) {
+		log.info("Display login page");
 		return "/login";
 	}
 
 
 	@GetMapping("/newContact")
 	public String newContact() {
-
+		log.info("Display newContact page");
 		return "newContact";
 
 	}
@@ -151,14 +161,20 @@ public class PayMyBuddyController {
 		}
 
 		if (exists.equals(TypeContact.ALREADY_EXISTS.toString())) {
+			log.error("Add A contact : " + exists );
 			model.addAttribute("contactDetailResponse", "Already");
 		} else if (exists.equals(TypeContact.NOT_IN_BDD.toString())) {
+			log.error("Add A contact : " + exists );
 			model.addAttribute("contactDetailResponse", "NoData");
 		}
-		if (exists.equals(TypeContact.NEW_CONTACT.toString()))
+		if (exists.equals(TypeContact.NEW_CONTACT.toString())) {
+			log.info("Add a new contact OK : Redirect:/contacts page ");
 			return "redirect:/contacts";
-		else
+		}
+		else {
+			log.info("Display newContact page");
 			return "newContact";
+		}
 	}
 
 	@GetMapping(value = "/logout")
@@ -167,6 +183,7 @@ public class PayMyBuddyController {
 		if (auth != null) {
 			new SecurityContextLogoutHandler().logout(request, response, auth);
 		}
+		log.info("Display logout page ");
 		return "redirect:/login?logout";
 	}
 
@@ -185,11 +202,13 @@ public class PayMyBuddyController {
 		model.addAttribute("buddyAccount", ba);
 
 		if (bu.getDateDenaissance() == null || bu.getFirstName() == null || bu.getLastName() == null) {
+			log.error("Profile : missing data");
 			model.addAttribute("profilDetailResponse", "noData");
 		} else {
 			model.addAttribute("profilDetailResponse", "data");
+			log.info("Profile ok");
 		}
-
+		log.info("Display Profile page");
 		return "Profile";
 
 	}
@@ -200,11 +219,12 @@ public class PayMyBuddyController {
 			BuddyAccount buddyAccount) {
 
 		if (bindingResult.hasErrors()) {
+			log.error("Profile - data KO in buddyUser : Display Profile page");
 			return "Profile";
 		} else {
 			buddyUser.setBuddyAccount(buddyAccount);
 			buddyUserService.saveBuddyUser(buddyUser);
-
+			log.info("Profile - Data OK : Display Profile page");
 			return "redirect:/watchmyprofile";
 		}
 
@@ -223,10 +243,11 @@ public class PayMyBuddyController {
 
 		if (ba.getBankName() == null || ba.getIban() == null) {
 			model.addAttribute("bankDetailResponse", "NoData");
+			log.error("BuddyAccount : bank details missing");
 		} else {
 			model.addAttribute("bankDetailResponse", "Data");
 		}
-
+		log.info("Display buddyAccount page");
 		return "buddyAccount";
 
 	}
@@ -240,7 +261,7 @@ public class PayMyBuddyController {
 
 		BuddyAccount ba = accountService.findBuddyAccountById(IdUser);
 		model.addAttribute("buddyAccount", ba);
-
+		log.info("Display chargebuddyAccount page");
 		return "chargebuddyAccount";
 
 	}
@@ -257,10 +278,12 @@ public class PayMyBuddyController {
 		model.addAttribute("buddyAccount", ba);
 
 		if ((ba.getBalance() - (1 + 0.05) * ba.getAmountToCharge()) < 0) {
+			log.error("balance insufficient");
 			model.addAttribute("reponseBalance", "ko");
 		} else {
 			model.addAttribute("reponseBalance", "ok");
 		}
+		log.info("Display chargebankAccount page");
 		return "chargebankAccount";
 
 	}
@@ -273,6 +296,7 @@ public class PayMyBuddyController {
 		String username = buddyUserService.retrievePseudoWithIdUser(buddyAccount.getId());
 
 		if (bindingResult.hasErrors()) {
+			log.error("BuddyAccount - impossible to Save : erreur validation data");
 			return "buddyAccount";
 		} else {
 			accountService.saveBuddyAccount(buddyAccount);
@@ -283,6 +307,7 @@ public class PayMyBuddyController {
 				utilityConfig.refreshContextWithNewRole(username, authentication, userDetailsServiceImpl);
 
 			}
+			log.info("Display buddyAccount page");
 			return "redirect:/watchmybudyAccount";
 		}
 	}
@@ -290,6 +315,7 @@ public class PayMyBuddyController {
 	@PostMapping("/creditMyBuddyAccount")
 	public String creditMyAccount(Model model, @Valid BuddyAccount buddyAccount, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
+			log.error("BuddyAccount - impossible to credit : erreur validation data");
 			return "chargebuddyAccount";
 		} else {
 			double resultat = Math.round((buddyAccount.getBalance() + buddyAccount.getAmountToCharge()) * 100.0)
@@ -300,7 +326,7 @@ public class PayMyBuddyController {
 			buddyAccount.setBalance(resultat);
 			buddyAccount.setAmountToCharge(0);
 			accountService.saveBuddyAccount(buddyAccount);
-
+			log.info("Display buddyAccount page");
 			return "redirect:/watchmybudyAccount";
 		}
 
@@ -311,6 +337,8 @@ public class PayMyBuddyController {
 
 		if (bindingResult.hasErrors() || (Math.round((buddyAccount.getBalance() - buddyAccount.getAmountToCharge()
 				- ope.calculFees(buddyAccount.getAmountToCharge())) * 100.0) / 100.0) < 0) {
+			
+			log.error("BuddyAccount - impossible to debit : erreur validation data");
 
 			accountService.saveBuddyAccount(buddyAccount);
 			return "redirect:/chargemybankAccount";
@@ -323,7 +351,7 @@ public class PayMyBuddyController {
 			buddyAccount.setBalance(resultat);
 			buddyAccount.setAmountToCharge(0);
 			accountService.saveBuddyAccount(buddyAccount);
-
+			log.info("Display buddyAccount page");
 			return "redirect:/watchmybudyAccount";
 		}
 
@@ -349,7 +377,7 @@ public class PayMyBuddyController {
 		model.addAttribute("page", page);
 
 		model.addAttribute("pageSize", size);
-
+		log.info("Display Transfert page");
 		return "Transfert";
 	}
 
@@ -363,7 +391,7 @@ public class PayMyBuddyController {
 
 		List<String> listPseudoContactBU = buddyService.findPseudoBuddyUserContactForAPseudo(pseudoBU);
 		model.addAttribute("listContacts", listPseudoContactBU);
-
+		log.info("Display NewTransfert page");
 		return "newTransfert";
 
 	}
@@ -392,15 +420,18 @@ public class PayMyBuddyController {
 					model.addAttribute("balanceResponse", "balanceKO");
 					List<String> listPseudoContactBU = buddyService.findPseudoBuddyUserContactForAPseudo(pseudoBU);
 					model.addAttribute("listContacts", listPseudoContactBU);
-
+					log.error("Transfer - Balance insufficent : Display newTransfert page");
 					return "newTransfert";
 				} else {
+					log.info("Transfer completed");
 					return "redirect:/transfers";
 				}
 			} catch (Exception e) {
+				log.error("Transfer - Problem with beneficiary account : Display newTransfert page");
 				return "newTransfert";
 			}
 		} else {
+			log.error("Transfer - Amount ko : Display newTransfert page");
 			return "newTransfert";
 		}
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration xmlns="http://logging.apache.org/log4j/2.0/config" status="WARN">
+
+	<Appenders>
+
+		<Console name="stdout" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%t] %c{1} - %m%n" />
+		</Console>
+
+		<File name="file" fileName="PayMyByddyAlerts.log">
+			<PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%t] %c{1} - %m%n" />
+		</File>
+
+	</Appenders>
+
+	<Loggers>
+
+		<Root level="info">
+
+			<AppenderRef ref="stdout" />
+			<AppenderRef ref="file" />
+
+		</Root>
+
+	</Loggers>
+
+</Configuration>
