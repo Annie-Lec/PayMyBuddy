@@ -26,7 +26,6 @@ import org.springframework.data.domain.Pageable;
 import fr.annielec.paymybuddy.entities.BuddyAccount;
 import fr.annielec.paymybuddy.entities.BuddyUser;
 import fr.annielec.paymybuddy.entities.Contact;
-import fr.annielec.paymybuddy.entities.Transaction;
 import fr.annielec.paymybuddy.entities.TypeTransaction;
 import fr.annielec.paymybuddy.repository.BuddyAccountRepository;
 import fr.annielec.paymybuddy.repository.ContactRepository;

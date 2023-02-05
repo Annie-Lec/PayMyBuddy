@@ -387,8 +387,7 @@ public class PayMyBuddyController {
 		if (Double.parseDouble(amount) > 0) {
 			try {
 
-				isBalanceSufficient = buddyService.addTransfersToBuddyUser(pseudoBU, pseudoContact,
-						Double.parseDouble(amount), description);
+				isBalanceSufficient = buddyService.addTransfersToBuddyUser(pseudoBU, pseudoContact, Double.parseDouble(amount), description);
 				if (!isBalanceSufficient) {
 					model.addAttribute("balanceResponse", "balanceKO");
 					List<String> listPseudoContactBU = buddyService.findPseudoBuddyUserContactForAPseudo(pseudoBU);

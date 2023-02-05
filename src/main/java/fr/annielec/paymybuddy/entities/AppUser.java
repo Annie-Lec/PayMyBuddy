@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
@@ -36,6 +37,7 @@ public class AppUser {
 	//quand charge un user, on charge tous ses roles donc on choisit EAGER pas LAZY
 	@ManyToMany(fetch = FetchType.EAGER)
 	//qd on utilise eager, il est préférable d initialise la collection avec new arrayList : un utilsateur par defaut une liste vide, pas null !
+	@ToString.Exclude
 	private Collection<AppRole> appRoles = new ArrayList<>();
 	
 	@OneToOne(cascade = CascadeType.ALL)

@@ -1,4 +1,4 @@
-#![Pay My Buddy](logoPMB.png)  
+![Pay My Buddy](logoPMB.png)  
 
 ## Presentation of Pay my Buddy :
 
@@ -21,7 +21,7 @@ Each user can consult his list of buddies and his list of transfers already made
 
 ### Getting Started
 
-## Spring Boot Project with  
+#### Spring Boot Project with  
  - Java 17
  - Thymeleaf
  - Spring Security

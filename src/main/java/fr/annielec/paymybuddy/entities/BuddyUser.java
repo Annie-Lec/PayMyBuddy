@@ -30,7 +30,6 @@ import lombok.ToString;
 @Entity
 
 @Data @NoArgsConstructor @AllArgsConstructor
-@ToString(exclude = {"Contacts"})
 public class BuddyUser {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -52,9 +51,11 @@ public class BuddyUser {
 	private BuddyAccount buddyAccount;
 	
 	@OneToMany(fetch = FetchType.LAZY)
+	@ToString.Exclude
 	private List<Contact> contacts = new ArrayList<>();
 	
 	@ManyToMany(fetch = FetchType.LAZY)
+	@ToString.Exclude
 	private List<Transaction> transactions = new ArrayList<>();
 	
 	

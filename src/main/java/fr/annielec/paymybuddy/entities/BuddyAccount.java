@@ -23,7 +23,7 @@ public class BuddyAccount {
 	@Min(value = 0)
 	private double balance;
 	
-	@Size(min=27, max=27)
+	@Size(max=27)
 	private String iban;
 	
 	@Size(max =  40)

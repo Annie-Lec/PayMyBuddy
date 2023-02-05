@@ -44,7 +44,7 @@ public class BuddyUserServiceImpl implements BuddyUserService {
 			throw new NullPointerException("Email non trouvé dans notre base de données!");
 		} else {
 			idUser = appUserRepository.findUserByUsername(email).getId();
-			buddyUser = findBuddyUserById(idUser);
+			buddyUser = buddyUserRepository.findBuddyUserById(idUser);
 		}
 
 		return buddyUser;

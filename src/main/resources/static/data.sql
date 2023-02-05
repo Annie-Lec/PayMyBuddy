@@ -1,6 +1,16 @@
+use mybuddy2;
+DROP TABLE IF EXISTS `app_user_app_roles`;
+DROP TABLE IF EXISTS `app_user`;
+DROP TABLE IF EXISTS `app_role`;
+DROP TABLE IF EXISTS `buddy_user_transactions`;
+DROP TABLE IF EXISTS `transaction`;
+DROP TABLE IF EXISTS `buddy_user_contacts`;
+DROP TABLE IF EXISTS `contact`;
+DROP TABLE IF EXISTS `buddy_user`;
+DROP TABLE IF EXISTS `buddy_account`;
 
-CREATE DATABASE IF NOT EXISTS `mybuddy2`;
-
+/*CREATE DATABASE IF NOT EXISTS `mybuddy2`;*/
+CREATE SCHEMA IF NOT EXISTS `mybuddy2` ;
 use `mybuddy2`;
 
 CREATE TABLE `app_role` (
@@ -108,8 +118,8 @@ INSERT INTO `mybuddy2`.`buddy_account`
 VALUES 
 (0,0,'',''),
 ( 0, 10, 'BNPP', 'FR4945457545454545454545492'),
-( 0, 0, '', ''),
-( 0, 0, '', ''),
+( 0, 0, 'LCL', 'FR4945457545454545454545493'),
+( 0, 0, 'CREDIT AGRICOLE', 'FR4945457545454545454545494'),
 ( 0, 0, 'BANQUE POPULAIRE', 'FR4945454545754545454545495'),
 ( 0, 0, 'HSBC', 'FR4945454545474545454545496'),
 ( 0, 107, 'BNPP', 'FR4945454545454745454545497')
@@ -145,10 +155,10 @@ INSERT INTO `mybuddy2`.`app_user_app_roles`
 `app_roles_id`)
 VALUES
 (2, 3),
-(3, 1),
-(4, 1),
-(5, 1),
-(6, 1),
+(3, 3),
+(4, 3),
+(5, 3),
+(6, 3),
 (7, 2),
 (7, 3)
 ;

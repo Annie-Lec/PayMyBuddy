@@ -8,7 +8,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+
 import javax.persistence.ManyToOne;
 
 import javax.validation.constraints.Min;
@@ -17,6 +17,7 @@ import javax.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
@@ -29,8 +30,10 @@ public class Transaction {
 	@Enumerated(EnumType.STRING)
 	private TypeTransaction type;
 	@ManyToOne
+	@ToString.Exclude
 	private BuddyUser transmitter;
 	@ManyToOne
+	@ToString.Exclude
 	private BuddyUser beneficiary;
 	private String description;
 	//@Past
